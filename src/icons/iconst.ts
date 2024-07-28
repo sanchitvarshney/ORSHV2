@@ -1,7 +1,7 @@
 import {
     MoonIcon,
     SunMedium,
-    LucideProps,
+ 
     Cat,
     Dog,
     Fish,
