@@ -32,7 +32,6 @@ import {
 } from '@/components/ui/sidebar';
 import { Separator } from '@/components/ui/separator';
 import { FaChevronDown } from 'react-icons/fa';
-import { RxCross2 } from 'react-icons/rx';
 import { FaChevronRight } from 'react-icons/fa';
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { NavlinkStyle } from '@/style/CustomStyles';
@@ -46,19 +45,14 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     <div className="flex flex-col min-h-screen bg-muted/40">
           <Sidebar open={open} onOpenChange={setOpen}>
         <SidebarContent
-          onInteractOutside={(e) => e.preventDefault()}
+        
           side={'left'}
           className="top-[20px] left-[20px] bottom-[20px] h-auto rounded-xl bg-teal-800 border-0 min-w-[300px] shadow shadow-stone-400 p-[20px]"
         >
-          <Button
-            variant={'outline'}
-            onClick={() => setOpen(false)}
-            className="h-[20px] cursor-pointer p-0 hover:bg-white hover:text-slate-600 w-[20px] bg-white/20 absolute top-[10px] right-[10px] text-white rounded-md flex justify-center items-center border-none"
-          >
-            <RxCross2 className="" />
-          </Button>
-          <SidebarHeader className="bg-white/20 rounded-lg p-[20px] mt-[20px]">
-            <img src="/main-logo.svg" alt="" />
+          
+          <SidebarHeader className="bg-white/20 rounded-lg p-[20px] ">
+            <img src="/lightlogov2.svg" alt="" className='w-[100%]'/>
+            {/* <img src="/subtext.svg" alt="" className='w-[200px]'/> */}
           </SidebarHeader>
           <aside className="flex-col mt-[20px] rounded-lg">
             <nav className="grid grid-cols-3 gap-[10px] p-[10px]">
@@ -123,10 +117,14 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         </SidebarContent>
       </Sidebar>
       <div className="border-t-[10px] border-[#04b0a8] h-[70px] flex shadow-sm fixed top-0 left-0 right-0 z-[30] bg-white">
-        <div className="bg-[#04b0a8] w-[300px] h-[50px]"></div>
+        <div className="bg-[#04b0a8] w-[300px] h-[50px] flex justify-end">
+          <img src="/lightlogo.svg" alt="Brand logo" className='w-[150px]'/>
+        
+        </div>
         <header className="  z-30 flex  justify-between    bg-[#fff] min-h-[50px] w-full pr-[20px]">
-          <div>
+          <div className='flex'>
             <img src="/navcurve.jpg" alt="" className="h-[50px]" />
+            <img src="/subtext.svg" alt="Brand logo"  className='w-[200px]'/>
           </div>
           <div className="flex items-center gap-[20px]">
             <div>
