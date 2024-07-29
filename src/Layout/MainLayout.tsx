@@ -1,11 +1,4 @@
-import {
-  BellRing,
-
-  Home,
-  
-  Mail,
-
-} from 'lucide-react';
+import { BellRing, Home, Mail } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -36,12 +29,13 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarFooter,
-
 } from '@/components/ui/sidebar';
-import { LuMenuSquare } from 'react-icons/lu';
 import { Separator } from '@/components/ui/separator';
 import { FaChevronDown } from 'react-icons/fa';
 import { RxCross2 } from 'react-icons/rx';
+import { FaChevronRight } from 'react-icons/fa';
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { NavlinkStyle } from '@/style/CustomStyles';
 
 interface Props {
   children: React.ReactNode;
@@ -49,46 +43,49 @@ interface Props {
 const MainLayout: React.FC<Props> = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
-    <div className="flex flex-col w-full min-h-screen bg-muted/40">
-      <Sidebar open={open} onOpenChange={setOpen}>
+    <div className="flex flex-col min-h-screen bg-muted/40">
+          <Sidebar open={open} onOpenChange={setOpen}>
         <SidebarContent
           onInteractOutside={(e) => e.preventDefault()}
           side={'left'}
-          className="top-[30px] left-[30px] bottom-[30px] h-auto rounded-xl bg-teal-600 border-0 min-w-[300px] shadow shadow-stone-400 p-[20px]"
+          className="top-[20px] left-[20px] bottom-[20px] h-auto rounded-xl bg-teal-800 border-0 min-w-[300px] shadow shadow-stone-400 p-[20px]"
         >
           <Button
             variant={'outline'}
             onClick={() => setOpen(false)}
-            className="h-[20px] cursor-pointer p-0 hover:bg-white hover:text-slate-600 w-[20px] bg-teal-500 absolute top-[10px] right-[10px] text-white rounded-md flex justify-center items-center"
+            className="h-[20px] cursor-pointer p-0 hover:bg-white hover:text-slate-600 w-[20px] bg-white/20 absolute top-[10px] right-[10px] text-white rounded-md flex justify-center items-center border-none"
           >
             <RxCross2 className="" />
           </Button>
-          <SidebarHeader className="bg-white rounded-lg p-[20px] mt-[20px]">
+          <SidebarHeader className="bg-white/20 rounded-lg p-[20px] mt-[20px]">
             <img src="/main-logo.svg" alt="" />
           </SidebarHeader>
-          <aside className="flex-col bg-teal-500 mt-[20px] rounded-lg">
-            <nav className="flex flex-col gap-[5px] p-[20px]">
+          <aside className="flex-col mt-[20px] rounded-lg">
+            <nav className="grid grid-cols-3 gap-[10px] p-[10px]">
               <NavLink
                 to="/"
-                className={(active) =>
-                  ` font-[500] flex items-center   gap-[10px] hover:bg-white hover:text-slate-600 py-[5px] px-[10px] rounded-md ${
-                    active && 'bg-white text-slate-600'
-                  }`
-                }
+                className={NavlinkStyle}
               >
                 <Home className="w-5 h-5" />
                 Dashboard
               </NavLink>
-              <Link
+              <NavLink
                 to="#"
-                className=" font-[500] flex items-center  text-white gap-[10px] hover:bg-white hover:text-slate-600 py-[5px] px-[10px] rounded-md"
+                className={NavlinkStyle}
               >
                 <Mail className="w-5 h-5" />
                 Invitation
-              </Link>
+              </NavLink>
+              <NavLink
+                to="#"
+                className={NavlinkStyle}
+              >
+                <MdOutlineAdminPanelSettings className="w-6 h-6" />
+                Admin
+              </NavLink>
             </nav>
           </aside>
-          <SidebarFooter className="absolute bottom-[20px] left-[20px] right-[20px] bg-white rounded-lg p-[10px]">
+          <SidebarFooter className="absolute bottom-[20px] left-[20px] right-[20px] bg-white/20 rounded-lg p-[10px]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className="flex items-center justify-between w-full cursor-pointer">
@@ -98,7 +95,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <Separator orientation="vertical" className="" />
-                    <div className="flex flex-col font-[500] gap-0">
+                    <div className="flex flex-col font-[500] gap-0 text-white">
                       Sachin Maurya
                       <span className="text-[13px] font-[400]">
                         Software Developer
@@ -106,14 +103,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                     </div>
                   </div>
                   <div>
-                    <FaChevronDown className="h-[20px] w-[20px] text-slate-400 mr-[10px]" />
+                    <FaChevronDown className="h-[20px] w-[20px] text-white/70 mr-[10px]" />
                   </div>
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-              
                 className="shadow-sm shadow-stone-500 ml-[30px]"
-                side='right'
+                side="right"
               >
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -126,17 +122,11 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           </SidebarFooter>
         </SidebarContent>
       </Sidebar>
-      <div className="flex flex-col w-full">
-        <header className="sticky top-0 z-30 flex items-center justify-between gap-4  sm:static sm:h-auto sm:border-0  bg-[#fff] min-h-[50px] px-[10px] shadow shadow-slate-300">
+      <div className="border-t-[10px] border-[#04b0a8] h-[70px] flex shadow-sm fixed top-0 left-0 right-0 z-[30] bg-white">
+        <div className="bg-[#04b0a8] w-[300px] h-[50px]"></div>
+        <header className="  z-30 flex  justify-between    bg-[#fff] min-h-[50px] w-full pr-[20px]">
           <div>
-            <CustomTooltip message="Menubar" side="right">
-              <div>
-                <LuMenuSquare
-                  className="text-2xl cursor-pointer text-slate-600"
-                  onClick={() => setOpen(true)}
-                />
-              </div>
-            </CustomTooltip>
+            <img src="/navcurve.jpg" alt="" className="h-[50px]" />
           </div>
           <div className="flex items-center gap-[20px]">
             <div>
@@ -190,7 +180,20 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             </DropdownMenu>
           </div>
         </header>
-        <main className="grid items-start flex-1 gap-4  sm:py-0 md:gap-8 bg-neutral-200 min-h-[calc(100vh-50px)]">
+      </div>
+      <div className="sidebar z-[20] fixed h-[100vh] bg-white w-[20px] left-0 top-0 bottom-0 flex justify-center items-center shadow">
+        <CustomTooltip message="Menubar" side="right">
+          <Button
+            onClick={() => setOpen(true)}
+            className="p-0 min-h-[50px] min-w-[50px] rounded-full bg-white text-slate-600 shadow-none hover:bg-ehite flex justify-end"
+          >
+            <FaChevronRight className="mr-[5px]" />
+          </Button>
+        </CustomTooltip>
+      </div>
+  
+      <div className="flex flex-col max-w-[calc(100vw-20px)] ml-[20px]">
+        <main className="grid items-start flex-1 gap-4  sm:py-0 md:gap-8 bg-neutral-200 min-h-[calc(100vh-70px)] mt-[70px]">
           {children}
         </main>
       </div>

@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Link } from 'react-router-dom';
 
 
 
@@ -48,6 +49,7 @@ const companyOptions: {
       value: string;
       label: string;
   }[];
+  empty:[]
 }  = {
   light: [
     { value: 'Company1', label: 'light1' },
@@ -61,6 +63,7 @@ const companyOptions: {
     { value: 'Company5', label: 'system1' },
     { value: 'Company6', label: 'system2' },
   ],
+  empty:[]
 };
 type FilterKeys = keyof typeof companyOptions;
 interface RowData {
@@ -101,7 +104,15 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
 
   const handleChange = (id: number, name: string, value: any) => {
     setRows(rows.map((row) => (row.id === id ? { ...row, [name]: value } : row)));
+   
+
   };
+  const handleFilterChange = (id: number, name: string, value: any) => {
+    setRows(rows.map((row) => (row.id === id ? { ...row, [name]: value ,companies:[]} : row)));
+   
+
+  };
+
 
   const handleCompanyChange = (id: number, selectedCompanies: string[]) => {
     handleChange(id, 'companies', selectedCompanies);
@@ -110,9 +121,12 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
-
+console.log("/////////////",rows)
   return (
+    <>
+   
     <Tabs defaultValue="filter">
+      <div className='flex items-center justify-center'>
       <TabsList className="h-[50px] ml-[10px] gap-[20px] bg-white shadow-sm shadow-stone-300 mt-[10px] px-[10px] rounded-full">
         <TabsTrigger value="filter" className={tabTriggerStyle}>
           Filter
@@ -121,7 +135,8 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
           Advance filter
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="filter" className="m-0 h-[calc(100vh-110px)]">
+      </div>
+      <TabsContent value="filter" className="m-0 h-[calc(100vh-130px)]">
         <div className="flex items-center justify-center w-full h-full">
           <Card className="flex flex-col overflow-hidden rounded-lg max-w-max min-w-[600px] bg-transparent border-none shadow-none">
             <CardHeader className="flex items-center justify-center p-0">
@@ -147,7 +162,7 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                               placeholder="Select a company..."
                               variant="secondary"
                               maxCount={3}
-                              className="max-w-[620px] min-w-[600px] rounded-full h-[50px] bg-white border border-neutral-300 shadow-none hover:bg-white"
+                              className=" min-w-[600px] rounded-full h-[50px] bg-white border border-neutral-300 shadow-none hover:bg-white"
                             />
                           </FormControl>
                           <FormMessage />
@@ -191,10 +206,10 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
       </TabsContent>
       <TabsContent
         value="advanceFilter"
-        className="m-0 h-[calc(100vh-110px)] overflow-y-auto "
+        className="m-0 h-[calc(100vh-130px)] overflow-y-auto "
       >
         <div className="flex items-center justify-center w-full mt-[20px]">
-          <Card className="min-w-[80%] rounded-lg shadow-sm shadow-stone-300 overflow-hidden h-[calc(100vh-150px)]">
+          <Card className="min-w-[80%] rounded-lg shadow-sm shadow-stone-300 overflow-hidden h-[calc(100vh-170px)]">
             <CardHeader className="p-0 h-[70px] bg-neutral-50 px-[10px] flex justify-between items-center flex-row text-slate-600 border-b border-neutral-200">
               <div>
                 <CardTitle className="text-[18px]">Advanced Filter</CardTitle>
@@ -210,7 +225,7 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                 <Plus /> Add Filter
               </Button>
             </CardHeader>
-            <CardContent className="py-[30px] h-[calc(100vh-280px)] overflow-y-auto">
+            <CardContent className="py-[30px] h-[calc(100vh-300px)] overflow-y-auto ">
               <ul className="flex flex-col gap-[20px] ">
                 {rows.map((row, index) => (
                   <li
@@ -224,7 +239,10 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                           <Select
                             value={row.filter}
                             onValueChange={(value) =>
-                              handleChange(row.id, 'filter', value)
+                            {
+                              handleFilterChange(row.id, 'filter', value)
+                            
+                            }
                             }
                           >
                             <SelectTrigger className="w-[180px] shadow-none placeholder: py-[20px] bg-white">
@@ -234,6 +252,7 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                               <SelectItem value="light">Light</SelectItem>
                               <SelectItem value="dark">Dark</SelectItem>
                               <SelectItem value="system">System</SelectItem>
+                              <SelectItem value="empty">Empty</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -241,13 +260,17 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                           <MultipleSelect
                             options={isValidFilter(row.filter) ? companyOptions[row.filter] : []}
                             onValueChange={(value) =>
+                             {
                               handleCompanyChange(row.id, value)
+                              
+                             }
                             }
                             defaultValue={row.companies}
                             placeholder="Select a company..."
-                            variant="inverted"
+                             variant="secondary"
                             maxCount={3}
-                            className="shadow-none min-w-[600px] max-w-[600px] bg-white hover:bg-white"
+                            className="w-auto bg-white shadow-none hover:bg-white min-w-[600px]"
+                            disabled={row.filter === ""?true : false}
                           />
                         </div>
                       </div>
@@ -257,6 +280,7 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
                         onClick={() => handleRemoveRow(row.id)}
                         variant="destructive"
                         className="shadow-stone-500"
+                       
                       >
                         <Trash2 />
                       </Button>
@@ -266,18 +290,21 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
               </ul>
             </CardContent>
             <CardFooter className='h-[60px] bg-neutral-50 shadow-sm border-t border-neutral-200'>
+              <Link to={"/employee-list"}>
               <Button
                 type="submit"
                 className="flex gap-[10px] bg-teal-500 hover:bg-teal-400 text-white shadow-sm shadow-stone-500 mt-[20px] py-[20px] px-[20px]"
+                disabled={rows.length <= 0 ? true :false}
               >
                 <SearchIcon className="w-[20px] h-[20px]" />
                 Search
               </Button>
+              </Link>
             </CardFooter>
           </Card>
         </div>
       </TabsContent>
-    </Tabs>
+    </Tabs></>
   );
 };
 

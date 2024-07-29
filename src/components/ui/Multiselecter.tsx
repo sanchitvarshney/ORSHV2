@@ -54,7 +54,7 @@ interface MultiSelectProps
     label: string;
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
-  }[];
+  }[] | [];
   onValueChange: (value: string[]) => void;
   defaultValue?: string[];
   placeholder?: string;
@@ -154,14 +154,14 @@ export const MultipleSelect = React.forwardRef<
           >
             {selectedValues.length > 0 ? (
               <div className="flex items-center justify-between w-full">
-                <div className="flex flex-wrap items-center">
+                <div className="flex items-center flex-nowrap">
                   {selectedValues.slice(0, maxCount).map((value) => {
                     const option = options.find((o) => o.value === value);
                     const IconComponent = option?.icon;
                     return (
                       <Badge
                         key={value}
-                        className={`bg-teal-500 shadow-sm rounded-full  hover:bg-teal-400 py-[5px] px-[10px] text-[15px] ${cn(
+                        className={`bg-teal-500 shadow-sm rounded-full  hover:bg-teal-400 py-[5px] px-[10px] text-slate-600  text-[15px] ${cn(
                           isAnimating ? "animate-bounce" : "",
                           multiSelectVariants({ variant })
                         )}`}
@@ -232,56 +232,67 @@ export const MultipleSelect = React.forwardRef<
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
           <Command className="min-w-full">
-            <CommandInput
+           {options.length != 0 && <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}
-            />
+            />}
             <CommandList className="min-w-full">
               <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup className="w-full">
-                <CommandItem
-                  key="all"
-                  onSelect={toggleAll}
-                  className="w-full min-w-full cursor-pointer"
-                >
-                  <div
-                    className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.length
-                        ? "bg-teal-500 text-primary-foreground border-teal-500"
-                        : "opacity-50 [&_svg]:invisible"
-                    )}
-                  >
-                    <CheckIcon className="w-4 h-4" />
-                  </div>
-                  <span>(Select All)</span>
-                </CommandItem>
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
-                  return (
+              {
+                  options.length <= 0 ?
+                  <p className="text-slate-500 my-[20px] mx-[20px] text-center">Options not found</p>
+                  :(
+                    <CommandGroup className="w-full">
                     <CommandItem
-                      key={option.value}
-                      onSelect={() => toggleOption(option.value)}
-                      className="cursor-pointer"
+                      key="all"
+                      onSelect={toggleAll}
+                      className="w-full min-w-full cursor-pointer"
                     >
                       <div
                         className={cn(
                           "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                          isSelected
-                            ? "bg-teal-500 text-white border-teal-500"
+                          selectedValues.length === options.length
+                            ? "bg-teal-500 text-primary-foreground border-teal-500"
                             : "opacity-50 [&_svg]:invisible"
                         )}
                       >
                         <CheckIcon className="w-4 h-4" />
                       </div>
-                      {option.icon && (
-                        <option.icon className="w-4 h-4 mr-2 text-muted-foreground" />
-                      )}
-                      <span>{option.label}</span>
+                      <span>(Select All)</span>
                     </CommandItem>
-                  );
-                })}
-              </CommandGroup>
+                    {
+                      
+                        options.map((option) => {
+                          const isSelected = selectedValues.includes(option.value);
+                          return (
+                            <CommandItem
+                              key={option.value}
+                              onSelect={() => toggleOption(option.value)}
+                              className="cursor-pointer"
+                            >
+                              <div
+                                className={cn(
+                                  "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                                  isSelected
+                                    ? "bg-teal-500 text-white border-teal-500"
+                                    : "opacity-50 [&_svg]:invisible"
+                                )}
+                              >
+                                <CheckIcon className="w-4 h-4" />
+                              </div>
+                              {option.icon && (
+                                <option.icon className="w-4 h-4 mr-2 text-muted-foreground" />
+                              )}
+                              <span>{option.label}</span>
+                            </CommandItem>
+                          );
+                        })
+                      
+                    }
+                  </CommandGroup>
+                  )
+              }
+             
               <CommandSeparator />
               <CommandGroup>
                 <div className="flex items-center justify-between">
