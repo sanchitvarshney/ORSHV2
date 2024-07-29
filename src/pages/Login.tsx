@@ -49,12 +49,14 @@ const Login: React.FC = () => {
                 </div>
                 <Input id="password" type="password" required />
               </div>
-              <Button
+             <Link to={"/"}>
+             <Button
                 type="submit"
                 className="w-full bg-teal-700 hover:bg-teal-600"
               >
                 Login
               </Button>
+             </Link>
             </div>
             <div className="mt-4 text-sm text-center">
               First time user?
