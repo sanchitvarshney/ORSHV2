@@ -14,7 +14,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { MultipleSelect } from '@/components/ui/Multiselecter';
 
+const options = [
+  { value: 'Company1', label: 'light1' },
+  { value: 'Company2', label: 'light2' },
+];
 const EmployeeData: React.FC = () => {
   const defaultColDef = useMemo(() => {
     return {
@@ -35,52 +40,104 @@ const EmployeeData: React.FC = () => {
             100 Records
           </Badge>
         </div>
-        <div className="h-[calc(100vh-270px)] overflow-y-auto px-[10px] bg-neutral-100">
+        <div className="h-[calc(100vh-270px)] overflow-y-auto px-[10px] bg-neutral-white">
           <Accordion type="multiple">
-            <AccordionItem value="item-1" className='border-neutral-300'>
-              <AccordionTrigger className='text-slate-600 text-[17px] hover:no-underline'>Companies</AccordionTrigger>
-              <AccordionContent className='flex flex-col gap-[10px]'>
-              <div className='flex gap-[10px] text-slate-600'>
-                <Checkbox/>Mscorpres
-              </div>
-              <div className='flex gap-[10px] text-slate-600 items-center'>
-                <Checkbox/>NextgenZ
-              </div>
-              <div className='flex gap-[10px] text-slate-600  items-center'>
-                <Checkbox/>Oakter
-              </div>
-              <div className='flex gap-[10px] text-slate-600  items-center'>
-                <Checkbox/>Flipkart
-              </div>
-              <div className='flex gap-[10px] text-slate-600  items-center'>
-                <Checkbox/>Amazon
-              </div>
-              <Separator className='bg-neutral-300'/>
-              <div className='flex gap-[10px] text-slate-700 font-[500] items-center'>
-                <Checkbox/>Select All
-              </div>
+            <AccordionItem value="item-1" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                Companies
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <MultipleSelect
+                  options={options}
+                  onValueChange={(e) => console.log(e)}
+                  variant={'secondary'}
+                  className="w-full"
+                  PannelClassName="min-w-[320px]"
+                  maxCount={2}
+                />
               </AccordionContent>
-              
             </AccordionItem>
-            <AccordionItem value="item-2" className='border-neutral-300'>
-              <AccordionTrigger className='text-slate-600 text-[17px] hover:no-underline'>Gender</AccordionTrigger>
-              <AccordionContent className='flex flex-col gap-[10px]'>
-              <div className='flex gap-[10px] text-slate-600'>
-                <Checkbox/>Male
-              </div>
-              <div className='flex gap-[10px] text-slate-600 items-center'>
-                <Checkbox/>Female
-              </div>
-          
-          
-              <Separator className='bg-neutral-300'/>
-              <div className='flex gap-[10px] text-slate-700 font-[500] items-center'>
-                <Checkbox/>Select All
-              </div>
+            <AccordionItem value="item-2" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                Gender
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <div className="flex gap-[10px] text-slate-600">
+                  <Checkbox />
+                  Male
+                </div>
+                <div className="flex gap-[10px] text-slate-600 items-center">
+                  <Checkbox />
+                  Female
+                </div>
+
+                <Separator className="bg-neutral-300" />
+                <div className="flex gap-[10px] text-slate-700 font-[500] items-center">
+                  <Checkbox />
+                  Select All
+                </div>
               </AccordionContent>
-              
             </AccordionItem>
-            
+            <AccordionItem value="item-3" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                Location
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <MultipleSelect
+                  options={options}
+                  onValueChange={(e) => console.log(e)}
+                  variant={'secondary'}
+                  className="w-full"
+                  PannelClassName="min-w-[320px]"
+                  maxCount={2}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-4" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                Industry
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <MultipleSelect
+                  options={options}
+                  onValueChange={(e) => console.log(e)}
+                  variant={'secondary'}
+                  className="w-full"
+                  PannelClassName="min-w-[320px]"
+                  maxCount={2}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-5" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                District
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <MultipleSelect
+                  options={options}
+                  onValueChange={(e) => console.log(e)}
+                  variant={'secondary'}
+                  className="w-full"
+                  PannelClassName="min-w-[320px]"
+                  maxCount={2}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="item-6" className="border-neutral-300">
+              <AccordionTrigger className="text-slate-600 text-[17px] hover:no-underline">
+                State
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col gap-[10px]">
+                <MultipleSelect
+                  options={options}
+                  onValueChange={(e) => console.log(e)}
+                  variant={'secondary'}
+                  className="w-full"
+                  PannelClassName="min-w-[320px]"
+                  maxCount={2}
+                />
+              </AccordionContent>
+            </AccordionItem>
           </Accordion>
         </div>
         <div className="bg-[#e0f2f1] h-[150px] w-full">

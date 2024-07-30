@@ -121,7 +121,6 @@ const isValidFilter = (filter: string): filter is FilterKeys => {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
-console.log("/////////////",rows)
   return (
     <>
    
@@ -162,7 +161,7 @@ console.log("/////////////",rows)
                               placeholder="Select a company..."
                               variant="secondary"
                               maxCount={3}
-                              className=" min-w-[600px] rounded-full h-[50px] bg-white border border-neutral-300 shadow-none hover:bg-white"
+                              className=" min-w-[600px] rounded-full h-[50px] bg-white border border-neutral-300 shadow hover:bg-white"
                             />
                           </FormControl>
                           <FormMessage />

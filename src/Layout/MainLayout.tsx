@@ -113,7 +113,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           </SidebarFooter>
         </SidebarContent>
       </Sidebar>
-      <div className="border-t-[10px] border-[#04b0a8] h-[70px] flex shadow-sm fixed top-0 left-0 right-0 z-[30] bg-white">
+      <div className="border-t-[10px] border-[#04b0a8] h-[70px] flex shadow shadow-neutral-300 fixed top-0 left-0 right-0 z-[30] bg-white">
         <div className="bg-[#04b0a8] w-[300px] h-[50px] flex justify-end">
           <img src="/lightlogov2.svg" alt="Brand logo" className="w-[170px]" />
         </div>
@@ -176,13 +176,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         </header>
       </div>
       <div
-        className="sidebar z-[20] fixed h-[100vh] bg-white w-[20px] left-0 top-0 bottom-0 flex justify-center items-center shadow cursor-pointer"
+        className="sidebar z-[20] fixed h-[100vh] bg-white w-[20px] left-0 top-0 bottom-0 flex justify-center items-center shadow shadow-neutral-300 cursor-pointer"
         onClick={() => setOpen(true)}
       >
         <CustomTooltip message="Menubar" side="right">
           <Button
             onClick={() => setOpen(true)}
-            className="p-0 min-h-[50px] min-w-[50px] rounded-full bg-white text-slate-600 shadow-none hover:bg-ehite flex justify-end"
+            className="p-0 min-h-[50px] min-w-[50px] rounded-full bg-white text-slate-600 shadow shadow-neutral-300 hover:bg-ehite flex justify-end"
           >
             <FaChevronRight className="mr-[5px]" />
           </Button>
@@ -190,7 +190,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       </div>
 
       <div className="flex flex-col max-w-[calc(100vw-20px)] ml-[20px]">
-        <main className="grid items-start flex-1 gap-4  sm:py-0 md:gap-8 bg-neutral-200 min-h-[calc(100vh-70px)] mt-[70px]">
+        <main className="grid items-start flex-1 gap-4  sm:py-0 md:gap-8 bg-white min-h-[calc(100vh-70px)] mt-[70px]">
           {children}
         </main>
       </div>

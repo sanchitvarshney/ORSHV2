@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import Login from './pages/Login';
@@ -8,6 +8,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import '@ag-grid-community/styles/ag-theme-quartz.css';
 import EmployeeData from './pages/EmployeeData';
+import AdminLayout from './Layout/AdminLayout';
+import CompanyPage from './pages/adminPages/CompanyPage';
+import WorkersPage from './pages/adminPages/WorkersPage';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -26,6 +29,26 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: '/company',
+    element: (
+      <MainLayout>
+        <AdminLayout>
+          <CompanyPage />
+        </AdminLayout>
+      </MainLayout>
+    ),
+  },
+  {
+    path: '/workers',
+    element: (
+      <MainLayout>
+        <AdminLayout>
+          <WorkersPage />
+        </AdminLayout>
+      </MainLayout>
+    ),
+  },
+  {
     path: '/login',
     element: <Login />,
   },
@@ -37,7 +60,6 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      
       <RouterProvider router={router} />
     </>
   );
