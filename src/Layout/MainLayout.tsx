@@ -62,7 +62,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           </SidebarHeader>
           <aside className="flex-col mt-[20px] rounded-lg">
             <nav className="grid grid-cols-3 gap-[10px] p-[10px]">
-              <NavLink to="/" className={NavlinkStyle}>
+              <NavLink to="/" className={NavlinkStyle} onClick={()=>setOpen(false)}>
                 <Home className="w-5 h-5" />
                 Dashboard
               </NavLink>
@@ -70,7 +70,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 <Mail className="w-5 h-5" />
                 Invitation
               </NavLink>
-              <NavLink to="#" className={NavlinkStyle}>
+              <NavLink to="/company" className={NavlinkStyle} onClick={()=>setOpen(false)}>
                 <MdOutlineAdminPanelSettings className="w-6 h-6" />
                 Admin
               </NavLink>
