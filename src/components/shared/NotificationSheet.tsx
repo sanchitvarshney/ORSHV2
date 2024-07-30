@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
 } from '@/components/ui/sidebar';
 import { Props } from '@/types/mainLayout';
