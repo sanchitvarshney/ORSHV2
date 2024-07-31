@@ -1,24 +1,29 @@
-import React, { useMemo } from 'react'
-import { AgGridReact } from 'ag-grid-react';
-import { columnDefs, dummyData } from '@/table/WorkersTableColumns';
-const WorkersPage:React.FC = () => {
-    const defaultColDef = useMemo(() => {
-        return {
-          filter: 'agTextColumnFilter',
-          floatingFilter: true,
-        };
-      }, []);
-    
+import React from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AddWorker from '@/components/shared/AddWorker';
+import { tabTriggerStyle } from '@/style/CustomStyles';
+import ListWorker from '@/components/shared/ListWorker';
+const WorkersPage: React.FC = () => {
   return (
-    <div className=" ag-theme-quartz h-[calc(100vh-70px)]">
-    <AgGridReact
-      rowData={dummyData}
-      columnDefs={columnDefs}
-      defaultColDef={defaultColDef}
-      pagination={true}
-    />
-  </div>
-  )
-}
+    <Tabs defaultValue="add-worker">
+      <div className="h-[70px] flex items-center px-[10px]">
+        <TabsList className="h-[50px]  gap-[20px] bg-white shadow-sm shadow-stone-300  px-[10px] rounded-full">
+          <TabsTrigger value="add-worker" className={tabTriggerStyle}>
+            Add Worker
+          </TabsTrigger>
+          <TabsTrigger value="list-worker" className={tabTriggerStyle}>
+            List Worker
+          </TabsTrigger>
+        </TabsList>
+      </div>
+      <TabsContent value="add-worker" className="h-[calc(100vh-140px) m-0 ">
+        <AddWorker />
+      </TabsContent>
+      <TabsContent value="list-worker" className="h-[calc(100vh-140px) m-0">
+        <ListWorker />
+      </TabsContent>
+    </Tabs>
+  );
+};
 
-export default WorkersPage
+export default WorkersPage;

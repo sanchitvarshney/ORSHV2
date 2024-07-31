@@ -17,7 +17,7 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             to="/company"
             className={({ isActive }) =>
               `px-[10px] py-[8px] text-slate-600 rounded-lg font-[500] flex items-center gap-[10px] ${
-                isActive && 'bg-teal-500 text-white' 
+                isActive && 'bg-teal-500 text-white'
               }`
             }
           >
@@ -27,30 +27,44 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
             Company
           </NavLink>
           <NavLink
-            to="/workers"
+            to="/client-user"
             className={({ isActive }) =>
               `px-[10px] py-[8px] text-slate-600 rounded-lg font-[500] flex items-center gap-[10px] ${
-                isActive && 'bg-teal-500 text-white' 
+                isActive && 'bg-teal-500 text-white'
               }`
             }
           >
             <div className="h-[20px] w-[20px]">
               <FaUserGroup className="h-[20px] w-[20px]" />
-             
             </div>
             Client & Users
           </NavLink>
-          <NavLink to={'#'}>
-            <div className="px-[10px] py-[8px] hover:bg-teal-500 hover:text-white text-slate-600 rounded-md font-[500] flex items-center gap-[10px]">
+          <NavLink
+            to="/workers"
+            className={({ isActive }) =>
+              `px-[10px] py-[8px] text-slate-600 rounded-lg font-[500] flex items-center gap-[10px] ${
+                isActive && 'bg-teal-500 text-white'
+              }`
+            }
+          >
+            <div className="h-[20px] w-[20px]">
               <GrUserWorker className="h-[20px] w-[20px]" />
-              Workers
             </div>
+            Workers
           </NavLink>
-          <NavLink to={'#'}>
-            <div className="px-[10px] py-[8px] hover:bg-teal-500 hover:text-white text-slate-600 rounded-md font-[500] flex items-center gap-[10px]">
+
+          <NavLink
+            to="/activity-log"
+            className={({ isActive }) =>
+              `px-[10px] py-[8px] text-slate-600 rounded-lg font-[500] flex items-center gap-[10px] ${
+                isActive && 'bg-teal-500 text-white'
+              }`
+            }
+          >
+            <div className="h-[20px] w-[20px]">
               <TbLayoutGridFilled className="h-[20px] w-[20px]" />
-              Activity Log
             </div>
+            Activity Log
           </NavLink>
         </nav>
       </div>

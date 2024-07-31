@@ -27,3 +27,25 @@ export const companyList = [
       icon: Icons.building,
     },
   ];
+  export const FakeCompanyData = [
+    "Apple",
+    "Microsoft",
+    "Google",
+    "Amazon",
+    "Facebook",
+    "Tesla",
+    "Samsung",
+    "Intel",
+    "IBM",
+    "Cisco",
+    "Oracle",
+    "Adobe",
+    "NVIDIA",
+    "Salesforce",
+    "PayPal",
+    "Spotify",
+    "Netflix",
+    "Uber",
+    "Airbnb",
+    "Slack"
+  ];

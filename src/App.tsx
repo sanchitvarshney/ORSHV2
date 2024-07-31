@@ -11,6 +11,8 @@ import EmployeeData from './pages/EmployeeData';
 import AdminLayout from './Layout/AdminLayout';
 import CompanyPage from './pages/adminPages/CompanyPage';
 import WorkersPage from './pages/adminPages/WorkersPage';
+import ClientUserPage from './pages/adminPages/ClientUserPage';
+import ActivityLogPage from './pages/adminPages/ActivityLogPage';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -44,6 +46,26 @@ const router = createBrowserRouter([
       <MainLayout>
         <AdminLayout>
           <WorkersPage />
+        </AdminLayout>
+      </MainLayout>
+    ),
+  },
+  {
+    path: '/client-user',
+    element: (
+      <MainLayout>
+        <AdminLayout>
+          <ClientUserPage/>
+        </AdminLayout>
+      </MainLayout>
+    ),
+  },
+  {
+    path: '/activity-log',
+    element: (
+      <MainLayout>
+        <AdminLayout>
+          <ActivityLogPage/>
         </AdminLayout>
       </MainLayout>
     ),
