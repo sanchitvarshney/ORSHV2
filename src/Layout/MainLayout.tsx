@@ -66,7 +66,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 <Home className="w-5 h-5" />
                 Dashboard
               </NavLink>
-              <NavLink to="#" className={NavlinkStyle}>
+              <NavLink to="/invitation/mail" className={NavlinkStyle}>
                 <Mail className="w-5 h-5" />
                 Invitation
               </NavLink>
