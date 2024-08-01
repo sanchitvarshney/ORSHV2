@@ -7,7 +7,7 @@ const MessageInvitationPage: React.FC = () => {
   const defaultColDef = useMemo(() => {
     return {
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
+     
     };
   }, []);
   return (
