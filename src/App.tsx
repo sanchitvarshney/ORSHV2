@@ -17,91 +17,111 @@ import InvitationPage from './pages/invitation/InvitationPage';
 import WhatsAppInvitationPage from './components/shared/WhatsAppInvitationPage';
 import MailInvitationPage from './components/shared/MailInvitationPage';
 import MessageInvitationPage from './components/shared/MessageInvitationPage';
+import Protected from '@/components/Protected';
+import { Toaster } from '@/components/ui/toaster';
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <MainLayout>
-        <HomePage />
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <HomePage />
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/employee-list',
     element: (
-      <MainLayout>
-        <EmployeeData />
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <EmployeeData />
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/company',
     element: (
-      <MainLayout>
-        <AdminLayout>
-          <CompanyPage />
-        </AdminLayout>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <AdminLayout>
+            <CompanyPage />
+          </AdminLayout>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/workers',
     element: (
-      <MainLayout>
-        <AdminLayout>
-          <WorkersPage />
-        </AdminLayout>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <AdminLayout>
+            <WorkersPage />
+          </AdminLayout>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/client-user',
     element: (
-      <MainLayout>
-        <AdminLayout>
-          <ClientUserPage />
-        </AdminLayout>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <AdminLayout>
+            <ClientUserPage />
+          </AdminLayout>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/activity-log',
     element: (
-      <MainLayout>
-        <AdminLayout>
-          <ActivityLogPage />
-        </AdminLayout>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <AdminLayout>
+            <ActivityLogPage />
+          </AdminLayout>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/invitation/whatsapp',
     element: (
-      <MainLayout>
-        <InvitationPage>
-          <WhatsAppInvitationPage />
-        </InvitationPage>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <InvitationPage>
+            <WhatsAppInvitationPage />
+          </InvitationPage>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/invitation/mail',
     element: (
-      <MainLayout>
-        <InvitationPage>
-          <MailInvitationPage />
-        </InvitationPage>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <InvitationPage>
+            <MailInvitationPage />
+          </InvitationPage>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
     path: '/invitation/message',
     element: (
-      <MainLayout>
-        <InvitationPage>
-          <MessageInvitationPage />
-        </InvitationPage>
-      </MainLayout>
+      <Protected authentication>
+        <MainLayout>
+          <InvitationPage>
+            <MessageInvitationPage />
+          </InvitationPage>
+        </MainLayout>
+      </Protected>
     ),
   },
   {
@@ -117,6 +137,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      <Toaster />
     </>
   );
 }

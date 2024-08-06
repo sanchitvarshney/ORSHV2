@@ -1,5 +1,5 @@
 import { BellRing, Home, Mail } from 'lucide-react';
-
+import { useToast } from "@/components/ui/use-toast"
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -36,17 +36,29 @@ import { FaChevronRight } from 'react-icons/fa';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
 import { NavlinkStyle } from '@/style/CustomStyles';
 import NotificationSheet from '@/components/shared/NotificationSheet';
+import { logout } from '@/features/auth/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/store';
 
 interface Props {
   children: React.ReactNode;
 }
 const MainLayout: React.FC<Props> = ({ children }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState<boolean>(false);
   const [notification, setNotification] = useState<boolean>(false);
   const uistate = {
     notification,
     setNotification
   }
+  const { toast } = useToast()
+  const handleLogout = () => {
+    dispatch(logout);
+    navigate('/login');
+    toast({description:"Logged Out Successfully"})
+  };
+
   return (
    <>
    <NotificationSheet uiState={uistate}/>
@@ -107,7 +119,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarFooter>
@@ -169,7 +181,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
