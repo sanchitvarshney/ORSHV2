@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice'; // Adjust path as needed
-import companiesSlice from '@/features/homePage/companies';
+import homePageSlice from '@/features/homePage/homePageSlice';
 
 export const store:any = configureStore({
   reducer: {
     auth: authReducer,
-    companies: companiesSlice,
+    homePage: homePageSlice,
   },
 });
 

@@ -5,8 +5,6 @@ const baseLink = 'https://esptest.mscorpres.net/';
 
 // Define types
 interface AuthState {
-  userName: string;
-  password: string;
   user: LoginResponseData | null; // Add user property to store login data
   error: string | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -18,8 +16,6 @@ interface LoginCredentials {
 }
 
 const initialState: AuthState = {
-  userName: '',
-  password: '',
   user: null, // Initialize with null
   error: null,
   loading: 'idle',
@@ -60,19 +56,11 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setEmail(state, action) {
-      state.userName = action.payload;
-    },
-    setPassword(state, action) {
-      state.password = action.payload;
-    },
     clearError(state) {
       state.error = null;
     },
     logout(state) {
       state.user = null;
-      state.userName = '';
-      state.password = '';
       state.error = null;
       state.loading = 'idle';
       localStorage.removeItem('loggedInUser'); // Clear user data from local storage
@@ -103,5 +91,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setEmail, setPassword, clearError, logout } = authSlice.actions;
+export const { clearError, logout } = authSlice.actions;
 export default authSlice.reducer;
