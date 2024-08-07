@@ -1,3 +1,4 @@
+import { LoggedInUserType } from "@/types/general";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { toast } from "react-toastify";
 
@@ -18,10 +19,13 @@ interface ErrorResponse {
 
 const loggedInUser: LoggedInUser | null = JSON.parse(localStorage.getItem("loggedInUser") as string);
 // const otherData: OtherData | null = JSON.parse(localStorage.getItem("otherData") as string);
+const localUser = localStorage.getItem("loggedInUser");
+const parsed: LoggedInUserType | null = JSON.parse(localUser ?? "null");
 
 const orshAxios = axios.create({
   baseURL: imsLink,
   headers: {
+    "auth-token": parsed?.token,
     "x-csrf-token": loggedInUser?.token,
   },
 });

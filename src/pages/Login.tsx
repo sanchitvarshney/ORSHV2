@@ -32,7 +32,6 @@ const Login: React.FC = () => {
      e.preventDefault();
      dispatch(login({ userName: email, password })).then((response: any) => {
        if (response.payload.success) {
-         console.log('success');
          navigate('/');
          toast({ title: 'Success!!', description: response.payload.message });
        }

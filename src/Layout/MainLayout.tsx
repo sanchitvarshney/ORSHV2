@@ -55,9 +55,10 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     setNotification,
   };
   const { companies } = useSelector((state: RootState) => state.homePage);
+  const [selectedCompany, setSelectedCompany] = useState<string | ''>('');
 
   const handleLogout = () => {
-    dispatch(logout);
+    dispatch(logout());
     navigate('/login');
     toast({ description: 'Logged Out Successfully' });
   };
@@ -65,6 +66,12 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     dispatch(fetchCompanies());
   }, []);
+
+  useEffect(() => {
+    if (companies?.length > 0) {
+      setSelectedCompany(companies[0].value);
+    }
+  }, [companies]);
 
   return (
     <>
@@ -161,7 +168,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             </div>
             <div className="flex items-center gap-[20px]">
               <div>
-                <Select>
+                <Select value={selectedCompany}>
                   <SelectTrigger className="w-[200px]">
                     <SelectValue placeholder="Choose Company" />
                   </SelectTrigger>
