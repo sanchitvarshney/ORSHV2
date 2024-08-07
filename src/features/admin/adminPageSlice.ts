@@ -1,95 +1,3 @@
-// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import axios from "axios";
-
-// const baseLink = 'https://esptest.mscorpres.net/';
-
-// export interface Department {
-//   text: string;
-//   value: string;
-// }
-
-// export interface Designations {
-//   text: string;
-//   value: string;
-// }
-
-// interface AdminPage {
-//   departments: Department[] | null;
-//   designations: Designations[] | null;
-// }
-
-// const initialState: AdminPage = {
-//   departments: [],
-//   designations: [],
-// };
-
-// export const fetchDepartments = createAsyncThunk<Department, void>(
-//     'homePage/fetchCompanies',
-//     async (_, { rejectWithValue }) => {
-//       try {
-//         const response = await axios.get<Department>(
-//           `${baseLink}fetch/departments`,
-//         );
-//         return response.data;
-//       } catch (error) {
-//         return rejectWithValue('Failed to fetch departments');
-//       }
-//     },
-//   );
-
-//   export const fetchDesignations = createAsyncThunk<Designations, void>(
-//     'homePage/fetchCompanies',
-//     async (_, { rejectWithValue }) => {
-//       try {
-//         const response = await axios.get<Designations>(
-//           `${baseLink}fetch/designations`,
-//         );
-//         return response.data;
-//       } catch (error) {
-//         return rejectWithValue('Failed to fetch designations');
-//       }
-//     },
-//   );
-
-//   const homePageSlice = createSlice({
-//     name: 'homePage',
-//     initialState,
-//     reducers: {
-//       clearDepartment(state) {
-//         state.departments = [];
-//       },
-//       clearDesignation(state) {
-//         state.designations = [];
-//       },
-//     },
-//     extraReducers: (builder) => {
-//       builder
-//         .addCase(fetchDepartments.pending, (state) => {
-//         })
-//         .addCase(fetchDepartments.fulfilled, (state, action) => {
-//           state.departments = action.payload;
-//         })
-//         .addCase(fetchDepartments.rejected, (state, action) => {
-//         })
-//         .addCase(fetchDesignations.pending, (state) => {
-//           state.loading = 'loading';
-//           state.error = null;
-//         })
-//         .addCase(fetchDesignations.fulfilled, (state, action) => {
-//           state.designations = action.payload;
-//           state.error = null;
-//         })
-//         .addCase(fetchDesignations.rejected, (state, action) => {
-//         });
-//     },
-//   });
-
-//   // Export actions and reducer
-//   export const {  } =
-//     homePageSlice.actions;
-//   export default homePageSlice.reducer;
-
-// adminPageSlice.ts
 import { orshAxios } from '@/axiosIntercepter';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -113,19 +21,45 @@ interface Company {
   activeStatus: string;
 }
 interface CompanyResponse {
-  data: Company[] |null;
+  data: Company[] | null;
+  message: string;
+  success: boolean;
+}
+
+export interface Department {
+  text: string;
+  value: string;
+}
+
+interface DepartmentResponse {
+  data: Department[] | null;
+  message: string;
+  success: boolean;
+}
+
+export interface Designation {
+  text: string;
+  value: string;
+}
+
+interface DesignationResponse {
+  data: Designation[] | null;
   message: string;
   success: boolean;
 }
 
 interface AdminPageState {
   companies: Company[] | null;
+  department: Department[] | null;
+  designation: Designation[] | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: AdminPageState = {
   companies: null,
+  department: [],
+  designation: [],
   loading: 'idle',
   error: null,
 };
@@ -161,6 +95,33 @@ export const fetchCompanies = createAsyncThunk<CompanyResponse, void>(
   },
 );
 
+export const fetchDepartments = createAsyncThunk<DepartmentResponse, void>(
+  'homePage/fetchDepartments',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<DepartmentResponse>(
+        `${baseLink}fetch/departments`,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch departments');
+    }
+  },
+);
+
+export const fetchDesignations = createAsyncThunk<DesignationResponse, void>(
+  'homePage/fetchDesignations',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<DesignationResponse>(
+        `${baseLink}fetch/designations`,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch designations');
+    }
+  },
+);
 
 // Create the slice
 const adminPageSlice = createSlice({
@@ -193,6 +154,16 @@ const adminPageSlice = createSlice({
       .addCase(fetchCompanies.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
+      })
+      .addCase(fetchDepartments.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.error = null;
+        state.department = action.payload.data;
+      })
+      .addCase(fetchDesignations.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.error = null;
+        state.designation = action.payload.data;
       });
   },
 });

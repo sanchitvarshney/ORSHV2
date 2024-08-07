@@ -1,4 +1,4 @@
-import  { useRef, useState } from 'react';
+import  { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -39,10 +39,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useDispatch, useSelector } from 'react-redux';
+import { Department, Designation, fetchDepartments, fetchDesignations } from '@/features/admin/adminPageSlice';
+import { AppDispatch, RootState } from '@/store';
 const AddWorker = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  console.log(buttonRef.current?.innerText);
+  
+  const { department,designation} = useSelector((state: RootState) => state.adminPage);
+
   const [date, setDate] = useState<Date>();
+
+  useEffect(()=>{
+    dispatch(fetchDepartments())
+    dispatch(fetchDesignations())
+  },[dispatch])
+
+  console.log()
   return (
     <div className='overflow-y-auto '>
       <div className="p-[10px]">
@@ -172,8 +185,11 @@ const AddWorker = () => {
                     <SelectValue className="" placeholder="--"/>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="light">Male</SelectItem>
-                    <SelectItem value="dark">Female</SelectItem>
+                  {department?.map((department: Department) => (
+                      <SelectItem value={department?.value} key={department?.value}>
+                        {department?.text}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -192,8 +208,11 @@ const AddWorker = () => {
                     <SelectValue className="" placeholder="--"/>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="light">Male</SelectItem>
-                    <SelectItem value="dark">Female</SelectItem>
+                  {designation?.map((designation: Designation) => (
+                      <SelectItem value={designation?.value} key={designation?.value}>
+                        {designation?.text}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
