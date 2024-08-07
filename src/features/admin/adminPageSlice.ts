@@ -103,12 +103,29 @@ interface AddCompanyPayload {
   website: string;
 }
 
+interface Company {
+  name: string;
+  companyID: string;
+  panNo: string;
+  email: string;
+  mobile: string;
+  website: string;
+  activeStatus: string;
+}
+interface CompanyResponse {
+  data: Company[] |null;
+  message: string;
+  success: boolean;
+}
+
 interface AdminPageState {
+  companies: Company[] | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: AdminPageState = {
+  companies: null,
   loading: 'idle',
   error: null,
 };
@@ -129,6 +146,22 @@ export const addCompany = createAsyncThunk(
   },
 );
 
+// Define the async thunk for fetching companies
+export const fetchCompanies = createAsyncThunk<CompanyResponse, void>(
+  'homePage/fetchCompanies',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<CompanyResponse>(
+        `${baseLink}company/list`,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch companies');
+    }
+  },
+);
+
+
 // Create the slice
 const adminPageSlice = createSlice({
   name: 'adminPage',
@@ -145,6 +178,19 @@ const adminPageSlice = createSlice({
         state.error = null;
       })
       .addCase(addCompany.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      })
+      .addCase(fetchCompanies.pending, (state) => {
+        state.loading = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchCompanies.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.error = null;
+        state.companies = action.payload.data;
+      })
+      .addCase(fetchCompanies.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });

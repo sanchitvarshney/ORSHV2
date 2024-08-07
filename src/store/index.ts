@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice'; // Adjust path as needed
 import homePageSlice from '@/features/homePage/homePageSlice';
+import adminPageSlice from '@/features/admin/adminPageSlice';
 
 export const store:any = configureStore({
   reducer: {
     auth: authReducer,
     homePage: homePageSlice,
+    adminPage:adminPageSlice,
   },
 });
 
