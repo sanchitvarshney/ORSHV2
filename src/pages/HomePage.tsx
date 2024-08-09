@@ -31,7 +31,11 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Link, useNavigate } from 'react-router-dom';
-import { advancedFilter, fetchSearchCompanies, SearchCompany } from '@/features/homePage/homePageSlice';
+import {
+  advancedFilter,
+  fetchSearchCompanies,
+  SearchCompany,
+} from '@/features/homePage/homePageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 
@@ -66,7 +70,7 @@ const FormSchema = z.object({
 const HomePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [companiesArray , setCompaniesArray] = useState([]);
+  const [companiesArray, setCompaniesArray] = useState<string[]>([]);
   const { searchCompanies } = useSelector((state: RootState) => state.homePage);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -93,11 +97,17 @@ const HomePage: React.FC = () => {
   };
 
   const handleChange = (id: number, name: string, value: any) => {
-    setRows(rows.map((row) => (row.id === id ? { ...row, [name]: value } : row)));
+    setRows(
+      rows.map((row) => (row.id === id ? { ...row, [name]: value } : row)),
+    );
   };
 
   const handleFilterChange = (id: number, value: string) => {
-    setRows(rows.map((row) => (row.id === id ? { ...row, filter: value, companies: [] } : row)));
+    setRows(
+      rows.map((row) =>
+        row.id === id ? { ...row, filter: value, companies: [] } : row,
+      ),
+    );
   };
 
   const handleCompanyChange = (id: number, selectedCompanies: string[]) => {
@@ -126,6 +136,14 @@ const HomePage: React.FC = () => {
     dispatch(fetchSearchCompanies());
   }, [dispatch]);
 
+  // Use handleSubmit to validate form data
+  const handleSubmitClick = async () => {
+    try {
+      await form.handleSubmit(onSubmit)(); // Validate and submit
+    } catch (error) {
+      console.error('Validation failed', error);
+    }
+  };
 
   return (
     <>
@@ -148,10 +166,7 @@ const HomePage: React.FC = () => {
               </CardHeader>
               <CardContent className="bg-transparent mt-[30px]">
                 <Form {...form}>
-                  <form
-                    // onSubmit={form.handleSubmit(onSubmit)}
-                    className="w-full flex flex-col gap-[20px] items-center justify-center"
-                  >
+                  <div className="w-full flex flex-col gap-[20px] items-center justify-center">
                     <div className="min-w-[300px] rounded">
                       <FormField
                         control={form.control}
@@ -166,7 +181,10 @@ const HomePage: React.FC = () => {
                                     label: company.name,
                                   }),
                                 )}
-                                onValueChange={field.onChange}
+                                onValueChange={(selected) => {
+                                  field.onChange(selected);
+                                  setCompaniesArray(selected);
+                                }}
                                 defaultValue={field.value}
                                 value={field.value}
                                 placeholder="Select a company..."
@@ -184,14 +202,17 @@ const HomePage: React.FC = () => {
                                 )
                                 .map((list: SearchCompany) => (
                                   <Badge
-                                    onClick={() =>{
-                                      setCompaniesArray(field.value)
-                                      console.log(...field.value,"val")
-                                      form.setValue('companies', [
+                                    onClick={() => {
+                                      const updatedCompanies = [
                                         ...field.value,
                                         list.companyID,
-                                      ])}
-                                    }
+                                      ];
+                                      setCompaniesArray(updatedCompanies);
+                                      form.setValue(
+                                        'companies',
+                                        updatedCompanies,
+                                      );
+                                    }}
                                     key={list.name}
                                     className="hover:bg-white bg-white border-gray-200 shadow min-w-[calc((100%/3)-10px)] justify-between rounded-full text-slate-600 px-[18px] py-[5px] flex items-center gap-[10px] text-[15px] cursor-pointer"
                                   >
@@ -207,14 +228,14 @@ const HomePage: React.FC = () => {
                       />
                     </div>
                     <Button
-                      type="submit"
+                      type="button" // Change type to "button" to prevent default form submission
                       className="flex rounded-full gap-[10px] bg-teal-500 hover:bg-teal-400 text-white shadow-sm shadow-stone-500 mt-[20px] py-[20px] px-[20px]"
-                    onClick={onSubmit}
+                      onClick={handleSubmitClick} // Use handleSubmitClick for validation and submission
                     >
                       <SearchIcon className="w-[20px] h-[20px]" />
                       Search
                     </Button>
-                  </form>
+                  </div>
                 </Form>
               </CardContent>
             </Card>
@@ -305,8 +326,9 @@ const HomePage: React.FC = () => {
               <CardFooter className="h-[60px] bg-neutral-50 shadow-sm border-t border-neutral-200">
                 <Link to={'/employee-list'}>
                   <Button
-                    type="submit"
+                    type="button" // Change type to "button" to prevent default form submission
                     className="flex gap-[10px] bg-teal-500 hover:bg-teal-400 text-white shadow-sm shadow-stone-500 mt-[20px] py-[20px] px-[20px]"
+                    onClick={handleSubmitClick} // Use handleSubmitClick for validation and submission
                     disabled={rows.length <= 0}
                   >
                     <SearchIcon className="w-[20px] h-[20px]" />

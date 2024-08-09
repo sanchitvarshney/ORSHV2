@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from '@/table/ListWorkerTable';
 import { DateRangePicker } from '../ui/dateRangePicker';
@@ -6,18 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { fetchWorkers } from '@/features/admin/adminPageSlice';
 import { format } from 'date-fns';
+import WorkerDetails from '@/components/shared/WorkerDetails';
 
 const ListWorker: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const workers = useSelector((state: RootState) => state.adminPage.workers);
-
-  const defaultColDef = useMemo(
-    () => ({
-      filter: 'agTextColumnFilter',
-      floatingFilter: true,
-    }),
-    [],
-  );
+  const [selectedEmpId, setSelectedEmpId] = useState<string | null>(null);
 
   const handleDateRangeUpdate = (values: {
     range: { from: Date; to?: Date };
@@ -46,9 +40,21 @@ const ListWorker: React.FC = () => {
     }
   };
 
+  const toggleShowDetails = (empId?: string) => {
+    setSelectedEmpId(empId ?? null);
+  };
+
+  const defaultColDef = useMemo(
+    () => ({
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    }),
+    [],
+  );
+
   return (
-    <div>
-      <div className="h-[50px] flex items-center px-[20px]">
+    <div className="flex flex-col h-[calc(100vh-50px)] p-5">
+      <div className="mb-4">
         <DateRangePicker
           align="center"
           locale="en-US"
@@ -56,16 +62,29 @@ const ListWorker: React.FC = () => {
           showCompare={false}
         />
       </div>
-      <div className="ag-theme-quartz h-[calc(100vh-190px)]">
-        <AgGridReact
-          rowData={workers}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          pagination={true}
-        />
+      <div className="flex flex-1">
+        <div className="flex-1 mr-4">
+          <div className="ag-theme-quartz h-full">
+            <AgGridReact
+              rowData={workers}
+              columnDefs={columnDefs}
+              defaultColDef={defaultColDef}
+              pagination={true}
+              context={{ toggleShowDetails }} // Pass the handler function
+            />
+          </div>
+        </div>
+        {selectedEmpId && (
+          <div className="flex-1 h-full">
+            <WorkerDetails
+              showEdit
+              empId={selectedEmpId} // Pass the selected employee ID
+              toggleDetails={toggleShowDetails} // Pass the function to close details
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
 export default ListWorker;

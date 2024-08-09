@@ -1,4 +1,5 @@
 import { orshAxios } from '@/axiosIntercepter';
+import { toast } from '@/components/ui/use-toast';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const baseLink = 'https://esptest.mscorpres.net/';
@@ -116,7 +117,15 @@ interface Worker {
 interface WorkersResponse {
   success: boolean;
   status: string;
+  message: string;
   data: Worker[];
+}
+
+interface WorkersInfoResponse {
+  success: boolean;
+  status: string;
+  message: string;
+  data: [];
 }
 
 interface AdminPageState {
@@ -126,6 +135,7 @@ interface AdminPageState {
   clientList: ClientDetail[] | null;
   activityLogs: ActivityLog[] | null;
   workers: Worker[] | null;
+  workerInfo: [] | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
@@ -137,6 +147,7 @@ const initialState: AdminPageState = {
   clientList: [],
   activityLogs: [],
   workers: [],
+  workerInfo: [],
   loading: 'idle',
   error: null,
 };
@@ -253,6 +264,13 @@ export const fetchWorkers = createAsyncThunk<
       const response = await orshAxios.get<WorkersResponse>(
         `https://esptest.mscorpres.net/worker/list?data=${startDate}-${endDate}&wise=createdDate`,
       );
+      if (!response.data.success) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: response.data.message,
+        });
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to fetch workers');
@@ -273,6 +291,20 @@ export const bulkUpload = createAsyncThunk<void, File, { rejectValue: string }>(
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to upload file');
+    }
+  },
+);
+
+export const fetchWorkerDetails = createAsyncThunk<WorkersInfoResponse, string>(
+  'adminPage/fetchWorkerDetails',
+  async (empId, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<WorkersInfoResponse>(
+        baseLink + `fetch/employeeAllInfo?username=${empId}`,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch workers');
     }
   },
 );
@@ -359,6 +391,16 @@ const adminPageSlice = createSlice({
       .addCase(fetchWorkers.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.workers = action.payload.data; // Set the workers data
+        state.error = null;
+      })
+      .addCase(fetchWorkerDetails.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+        state.workers = [];
+      })
+      .addCase(fetchWorkerDetails.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.workerInfo = action.payload.data;
         state.error = null;
       });
   },

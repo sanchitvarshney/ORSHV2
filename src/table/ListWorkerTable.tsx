@@ -1,11 +1,52 @@
 import { ColDef } from 'ag-grid-community';
 
-export  const columnDefs: ColDef[] = [
-    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true,flex:1},
-    { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true ,flex:1},
-    { headerName: 'Phone', field: 'mobile', sortable: true, filter: true ,flex:1},
-    { headerName: 'E-mail', field: 'email', sortable: true, filter: true ,flex:1},
-    { headerName: 'D.O.B', field: 'DOB', sortable: true, filter: true ,flex:1}
+const actionCellRenderer = (params: any) => {
+  const { toggleShowDetails } = params.context;
+  console.log(params);
+  return (
+    <div className="flex justify-center">
+      <button
+        onClick={() => toggleShowDetails(params.data.employeeID)}
+        className="text-teal-500 hover:text-teal-600"
+        aria-label="Show Name"
+      >
+        {params.data.firstName}
+      </button>
+    </div>
+  );
+};
+
+export const columnDefs: ColDef[] = [
+  {
+    headerName: 'First Name',
+    field: 'firstName',
+    sortable: true,
+    filter: true,
+    flex: 1,
+    cellRenderer: actionCellRenderer,
+  },
+  {
+    headerName: 'Last Name',
+    field: 'lastName',
+    sortable: true,
+    filter: true,
+    flex: 1,
+  },
+  {
+    headerName: 'Phone',
+    field: 'mobile',
+    sortable: true,
+    filter: true,
+    flex: 1,
+  },
+  {
+    headerName: 'E-mail',
+    field: 'email',
+    sortable: true,
+    filter: true,
+    flex: 1,
+  },
+  { headerName: 'D.O.B', field: 'DOB', sortable: true, filter: true, flex: 1 },
 ];
 
 interface RowData {
@@ -22,6 +63,3 @@ export const dummyData: RowData[] = [
     { firstName: 'Alice', lastName: 'Johnson', phone: '345-678-9012', email: 'alice.johnson@example.com', dob: '05/23/1992' },
     { firstName: 'Bob', lastName: 'Brown', phone: '456-789-0123', email: 'bob.brown@example.com', dob: '12/11/1987' }
 ];
-
-
-

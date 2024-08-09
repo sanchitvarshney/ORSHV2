@@ -44,10 +44,10 @@ export function FileUploadDialog({ onClose }: FileUploadDialogProps) {
 
   const submitConfirm = async () => {
     if (files && files[0]) {
+      onClose();
       dispatch(bulkUpload(files[0])).then((response: any) => {
         if (response.payload.success) {
           toast({ title: 'Success!!', description: response.payload.message });
-          onClose();
           setShowSubmitConfirm(false);
           resetHandler();
         }
