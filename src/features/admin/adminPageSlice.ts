@@ -146,6 +146,28 @@ interface BranchInfoResponse {
   data: BranchDetail[] | null;
 }
 
+interface PinCode {
+  block: string;
+  branchType: string;
+  circle: string;
+  country: string;
+  deliveryStatus: string;
+  description: string;
+  district: string;
+  division: string;
+  name: string;
+  pinCode: string;
+  region: string;
+  state: string;
+}
+
+interface PincodeResponse {
+  success: boolean;
+  status: string;
+  message: string;
+  data: PinCode[] | null;
+}
+
 interface AdminPageState {
   companies: Company[] | null;
   department: Department[] | null;
@@ -159,6 +181,8 @@ interface AdminPageState {
   activityLogs: ActivityLog[] | null;
   branches: BranchDetail[] | null;
   workers: Worker[] | null;
+  corPincode: PinCode[] | null;
+  perPincode: PinCode[] | null;
   workerInfo: [] | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
@@ -178,6 +202,8 @@ const initialState: AdminPageState = {
   workers: [],
   branches: [],
   workerInfo: [],
+  corPincode: [],
+  perPincode:[],
   loading: 'idle',
   error: null,
 };
@@ -191,7 +217,7 @@ export const addCompany = createAsyncThunk(
         baseLink + 'company/add',
         companyData,
       );
-      return response.data;
+      return response.data.add;
     } catch (error) {
       return rejectWithValue('Failed to add company');
     }
@@ -431,6 +457,36 @@ export const getCompanyBranchOptions = createAsyncThunk<
     }
   },
 );
+interface GetLocationsParams {
+  pinCode: string;
+  addressType: 'permanent' | 'corresponding';
+}
+
+export const getLocationsFromPinCode = createAsyncThunk<
+  PincodeResponse,
+  GetLocationsParams
+>(
+  'adminPage/getLocationsFromPinCode',
+  async ({ pinCode, addressType }, { rejectWithValue }) => {
+    console.log(pinCode, addressType);
+    try {
+      const response = await orshAxios.get<PincodeResponse>(
+        baseLink + `fetch/pinCodeDetails?pincode=${pinCode}`
+      );
+      if (!response.data.success) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: response.data.message,
+        });
+        return rejectWithValue(response.data.message);
+      }
+      return { data: response.data.data, addressType };
+    } catch (error) {
+      return rejectWithValue('Failed to fetch workers');
+    }
+  }
+);
 
 export const deleteActivityLog = createAsyncThunk<void, string>(
   'adminPage/deleteActivityLog',
@@ -554,6 +610,16 @@ const adminPageSlice = createSlice({
       .addCase(getCompanyBranchOptions.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.branches = action.payload.data;
+        state.error = null;
+      })
+      .addCase(getLocationsFromPinCode.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        const { addressType, data } = action.payload;
+        if (addressType === 'corresponding') {
+          state.corPincode = data;
+        } else if (addressType === 'permanent') {
+          state.perPincode = data;
+        }
         state.error = null;
       });
   },

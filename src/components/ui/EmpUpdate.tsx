@@ -49,6 +49,7 @@ import {
   fetchWorkerDetails,
   getCompanyBranchOptions,
   getEducationStatus,
+  getLocationsFromPinCode,
   getStreams,
   universitiesSearch,
 } from '@/features/admin/adminPageSlice';
@@ -62,12 +63,13 @@ export default function EmpUpdate() {
     department: departmentList,
     designation: designationList,
     marriedStatus,
-    states,
     branches,
     universityList,
     streams,
     educationStatus,
     workerInfo,
+    corPincode: corState,
+    perPincode: perState,
   } = useSelector((state: RootState) => state.adminPage);
   const { searchCompanies } = useSelector((state: RootState) => state.homePage);
   const [empFirstName, setEmpFirstName] = useState(
@@ -121,6 +123,13 @@ export default function EmpUpdate() {
   const [motherName, setMotherName] = useState('');
   const [spouseName, setSpouseName] = useState('');
   const [childrenCount, setChildrenCount] = useState('');
+  const [perPinCode, setPerPinCode] = useState('');
+  const [corPinCode, setCorPinCode] = useState('');
+  const [perHouseNo, setPerHouseNo] = useState('');
+  const [corHouseNo, setCorHouseNo] = useState('');
+  const [perArea, setPerArea] = useState('');
+  const [corArea, setCorArea] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
   const [children, setChildren] = useState([
     {
       name: '',
@@ -224,15 +233,38 @@ export default function EmpUpdate() {
       dispatch(fetchSearchCompanies());
     }
   }, []);
-  console.log(
-    fatherName,
-    motherName,
-    spouseName,
-    children,
-    childrenCount,
-    '+++++',
-    branches,
+
+  useEffect(() => {
+    if (perPinCode.length === 6) {
+      dispatch(
+        getLocationsFromPinCode({
+          pinCode: perPinCode,
+          addressType: 'permanent',
+        }),
+      );
+    }
+    if (corPinCode.length === 6) {
+      dispatch(
+        getLocationsFromPinCode({
+          pinCode: corPinCode,
+          addressType: 'corresponding',
+        }),
+      );
+    }
+  }, [perPinCode, corPinCode]);
+  const permanentResult = perState.find((item: any) => item.name === perArea);
+  const correspondingResult = corState.find(
+    (item: any) => item.name === corArea,
   );
+
+  useEffect(() => {
+    if (isChecked) {
+      setCorPinCode(perPinCode);
+      setCorHouseNo(perHouseNo);
+      setCorArea(perArea);
+    }
+  }, [isChecked, perPinCode, perHouseNo, perArea]);
+  console.log(empDOB, '+++++');
   return (
     <div className="overflow-y-auto">
       <div className="p-[10px]">
@@ -244,88 +276,43 @@ export default function EmpUpdate() {
           </CardHeader>
           <CardContent className="py-[10px] overflow-x-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2">
-              {/* First Name */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empFirstName}
-                  onChange={(e) => setEmpFirstName(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    First Name
-                  </span>
-                </Label>
-              </div>
+              <LabelInput
+                value={empFirstName}
+                onChange={(e) => setEmpFirstName(e.target.value)}
+                icon={AiOutlineUser}
+                label="First Name"
+                required
+              />
 
-              {/* Middle Name */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empMiddleName}
-                  onChange={(e) => setEmpMiddleName(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    Middle Name
-                  </span>
-                </Label>
-              </div>
+              <LabelInput
+                value={empMiddleName}
+                onChange={(e) => setEmpMiddleName(e.target.value)}
+                icon={AiOutlineUser}
+                label="Middle Name"
+                required
+              />
+              <LabelInput
+                value={empLastName}
+                onChange={(e) => setEmpLastName(e.target.value)}
+                icon={AiOutlineUser}
+                label="Last Name"
+                required
+              />
+              <LabelInput
+                value={empEmail}
+                onChange={(e) => setEmpEmail(e.target.value)}
+                icon={CiMail}
+                label="Email"
+                required
+              />
+              <LabelInput
+                value={empMobile}
+                onChange={(e) => setEmpMobile(e.target.value)}
+                icon={BsTelephone}
+                label="Phone"
+                required
+              />
 
-              {/* Last Name */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empLastName}
-                  onChange={(e) => setEmpLastName(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    Last Name
-                  </span>
-                </Label>
-              </div>
-
-              {/* Email */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empEmail}
-                  onChange={(e) => setEmpEmail(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <CiMail className="h-[18px] w-[18px]" />
-                    Email
-                  </span>
-                </Label>
-              </div>
-
-              {/* Phone */}
-              <div className="floating-label-group">
-                <Input
-                  type="number"
-                  required
-                  className={inputStyle}
-                  value={empMobile}
-                  onChange={(e) => setEmpMobile(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <BsTelephone className="h-[18px] w-[18px]" />
-                    Phone
-                  </span>
-                </Label>
-              </div>
-
-              {/* Gender */}
               <div>
                 <Label className="floating-label gap-[10px]">
                   <span className="flex items-center gap-[10px]">
@@ -380,193 +367,72 @@ export default function EmpUpdate() {
                   </PopoverContent>
                 </Popover>
               </div>
-              {/* <div>
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    Date Of Birth
-                  </span>
-                </Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={'outline'}
-                      className={cn(
-                        `${inputStyle} w-full justify-start hover:bg-transparent`,
-                      )}
-                    >
-                      <CalendarIcon className="w-4 h-4 mr-2" />
-                      {empDOB ? empDOB.toLocaleDateString() : 'Pick a date'}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      value={empDOB}
-                      onChange={setEmpDOB}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div> */}
+              <SelectWithLabel
+                label="Marital Status"
+                value={maritalStatus}
+                onValueChange={(value) => setMaritalStatus(value)}
+                options={marriedStatus}
+                textKey="text"
+                optionKey="value"
+                icon={LiaClipboardListSolid}
+              />
+              <LabelInput
+                value={empBloodGroup}
+                onChange={(e) => setEmpBloodGroup(e.target.value)}
+                icon={LiaClipboardListSolid}
+                label="Blood Group"
+                required
+              />
+              <SelectWithLabel
+                label="Designation"
+                value={designation}
+                onValueChange={(value) => setDesignation(value)}
+                options={designationList}
+                textKey="text"
+                optionKey="value"
+                icon={LiaClipboardListSolid}
+              />
 
-              {/* Marital Status */}
-              <div>
-                <Label className="floating-label  gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <LiaClipboardListSolid className="h-[18px] w-[18px]" />
-                    Marital Status
-                  </span>
-                </Label>
-                <Select onValueChange={setMaritalStatus}>
-                  <SelectTrigger
-                    className={`${inputStyle} input2  focus:ring-0`}
-                    ref={buttonRef}
-                  >
-                    <SelectValue className="" placeholder="--" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {marriedStatus?.map((status: Designation) => (
-                      <SelectItem value={status?.value} key={status?.value}>
-                        {status?.text}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <SelectWithLabel
+                label="Department"
+                value={department}
+                onValueChange={(value) => setDepartment(value)}
+                options={departmentList}
+                textKey="text"
+                optionKey="value"
+                icon={LiaClipboardListSolid}
+              />
 
-              {/* Blood Group */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empBloodGroup}
-                  onChange={(e) => setEmpBloodGroup(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <LiaClipboardListSolid className="h-[18px] w-[18px]" />
-                    Blood Group
-                  </span>
-                </Label>
-              </div>
-              <div>
-                <Label className="floating-label  gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <LiaClipboardListSolid className="h-[18px] w-[18px]" />
-                    Designation
-                  </span>
-                </Label>
-                <Select onValueChange={setDesignation}>
-                  <SelectTrigger
-                    className={`${inputStyle} input2  focus:ring-0`}
-                    ref={buttonRef}
-                  >
-                    <SelectValue className="" placeholder="--" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {designationList?.map((designation: Designation) => (
-                      <SelectItem
-                        value={designation?.value}
-                        key={designation?.value}
-                      >
-                        {designation?.text}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <LabelInput
+                value={empAdhaar}
+                onChange={(e) => setEmpAdhaar(e.target.value)}
+                icon={PiCreditCard}
+                label="Aadhar Card Number"
+                required
+              />
 
-              {/* Department */}
-              <div>
-                <Label className="floating-label  gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <LiaClipboardListSolid className="h-[18px] w-[18px]" />
-                    Department
-                  </span>
-                </Label>
-                <Select onValueChange={setDepartment}>
-                  <SelectTrigger
-                    className={`${inputStyle} input2  focus:ring-0`}
-                    ref={buttonRef}
-                  >
-                    <SelectValue className="" placeholder="--" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {departmentList?.map((department: Department) => (
-                      <SelectItem
-                        value={department?.value}
-                        key={department?.value}
-                      >
-                        {department?.text}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <LabelInput
+                value={empPan}
+                onChange={(e) => setEmpPan(e.target.value)}
+                icon={PiCreditCard}
+                label="PAN Number"
+                required
+              />
+              <LabelInput
+                value={empMark}
+                onChange={(e) => setEmpMark(e.target.value)}
+                icon={AiOutlineUser}
+                label="Identification Mark"
+                required
+              />
 
-              {/* Aadhar Card Number */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empAdhaar}
-                  onChange={(e) => setEmpAdhaar(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <PiCreditCard className="h-[18px] w-[18px]" />
-                    Aadhar Card Number
-                  </span>
-                </Label>
-              </div>
-
-              {/* PAN Number */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empPan}
-                  onChange={(e) => setEmpPan(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <PiCreditCard className="h-[18px] w-[18px]" />
-                    PAN Number
-                  </span>
-                </Label>
-              </div>
-
-              {/* Identification Mark */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empMark}
-                  onChange={(e) => setEmpMark(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    Identification Mark
-                  </span>
-                </Label>
-              </div>
-
-              {/* Hobbies */}
-              <div className="floating-label-group">
-                <Input
-                  required
-                  className={inputStyle}
-                  value={empHobbies}
-                  onChange={(e) => setEmpHobbies(e.target.value)}
-                />
-                <Label className="floating-label gap-[10px]">
-                  <span className="flex items-center gap-[10px]">
-                    <AiOutlineUser className="h-[18px] w-[18px]" />
-                    Hobbies
-                  </span>
-                </Label>
-              </div>
+              <LabelInput
+                value={empHobbies}
+                onChange={(e) => setEmpHobbies(e.target.value)}
+                icon={AiOutlineUser}
+                label="Hobbies"
+                required
+              />
             </div>
           </CardContent>
         </Card>
@@ -585,105 +451,57 @@ export default function EmpUpdate() {
                   </p>
                 </div>
                 <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
-                  <div className="floating-label-group">
-                    <Input
-                      required
-                      className={inputStyle}
-                      // value={empAdhaar}
-                      // onChange={(e) => setEmpAdhaar(e.target.value)}
-                    />
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <Navigation className="h-[18px] w-[18px]" />
-                        Pin Code
-                      </span>
-                    </Label>
-                  </div>
-
-                  <div className="floating-label-group">
-                    <Select
-                    // onValueChange={(value) => setDepartment(value)}
-                    >
-                      <SelectTrigger className={`${inputStyle} focus:ring-0`}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="hr">Human Resources</SelectItem>
-                        <SelectItem value="it">
-                          Information Technology
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <Map className="h-[18px] w-[18px]" />
-                        Area/Post Office
-                      </span>
-                    </Label>
-                  </div>
-                  <div className="floating-label-group">
-                    <Select
-                    // onValueChange={(value) => setDepartment(value)}
-                    >
-                      <SelectTrigger className={`${inputStyle} focus:ring-0`}>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="hr">Human Resources</SelectItem>
-                        <SelectItem value="it">
-                          Information Technology
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <Map className="h-[18px] w-[18px]" />
-                        State
-                      </span>
-                    </Label>
-                  </div>
-                  <div className="floating-label-group">
-                    <Input
-                      required
-                      className={inputStyle}
-                      // value={empAdhaar}
-                      // onChange={(e) => setEmpAdhaar(e.target.value)}
-                    />
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <LocateIcon className="h-[18px] w-[18px]" />
-                        City
-                      </span>
-                    </Label>
-                  </div>
-                  <div className="floating-label-group">
-                    <Input
-                      required
-                      className={inputStyle}
-                      // value={empAdhaar}
-                      // onChange={(e) => setEmpAdhaar(e.target.value)}
-                    />
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <Navigation className="h-[18px] w-[18px]" />
-                        District
-                      </span>
-                    </Label>
-                  </div>
-                  <div className="floating-label-group">
-                    <Input
-                      required
-                      className={inputStyle}
-                      // value={empAdhaar}
-                      // onChange={(e) => setEmpAdhaar(e.target.value)}
-                    />
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <PiHouseLine className="h-[18px] w-[18px]" />
-                        House No.
-                      </span>
-                    </Label>
-                  </div>
+                  <LabelInput
+                    value={perPinCode}
+                    onChange={(e) => setPerPinCode(e.target.value)}
+                    icon={Navigation}
+                    label="Pin Code"
+                    required
+                  />
+                  <SelectWithLabel
+                    label="Area/Post Office"
+                    value={perArea}
+                    onValueChange={(value) => {
+                      setPerArea(value);
+                      console.log(value);
+                    }}
+                    options={perState}
+                    textKey="name"
+                    optionKey="name"
+                    icon={Building}
+                    blank
+                  />
+                  <LabelInput
+                    value={permanentResult?.state}
+                    onChange={() => {}}
+                    icon={Map}
+                    label="State"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={permanentResult?.block}
+                    onChange={() => {}}
+                    icon={LocateIcon}
+                    label="City"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={permanentResult?.district}
+                    onChange={() => {}}
+                    icon={Navigation}
+                    label="District"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={perHouseNo}
+                    onChange={(e) => setPerHouseNo(e.target.value)}
+                    icon={PiHouseLine}
+                    label="House No."
+                    required
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-y-2">
@@ -695,8 +513,8 @@ export default function EmpUpdate() {
                     <input
                       type="checkbox"
                       id="terms"
-                      // checked={isChecked}
-                      // onChange={(e) => setIsChecked(e.target.checked)}
+                      checked={isChecked}
+                      onChange={(e) => setIsChecked(e.target.checked)}
                       className="form-checkbox"
                     />
                     <label
@@ -707,21 +525,21 @@ export default function EmpUpdate() {
                     </label>
                   </div>
                 </div>
-                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
-                  <div className="floating-label-group">
-                    <Input
-                      required
-                      className={inputStyle}
-                      // value={empAdhaar}
-                      // onChange={(e) => setEmpAdhaar(e.target.value)}
-                    />
-                    <Label className="floating-label gap-[10px]">
-                      <span className="flex items-center gap-[10px]">
-                        <Navigation className="h-[18px] w-[18px]" />
-                        Pin Code
-                      </span>
-                    </Label>
-                  </div>
+                {/* <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
+                  <LabelInput
+                    value={corPinCode}
+                    onChange={(e) => setCorPinCode(e.target.value)}
+                    icon={Navigation}
+                    label="Pin Code"
+                    required
+                  />
+                  <LabelInput
+                    value={corPinCode}
+                    onChange={(e) => setCorPinCode(e.target.value)}
+                    icon={Navigation}
+                    label="Pin Code"
+                    required
+                  />
 
                   <div className="floating-label-group">
                     <Select
@@ -807,6 +625,59 @@ export default function EmpUpdate() {
                       </span>
                     </Label>
                   </div>
+                </div> */}
+                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
+                  <LabelInput
+                    value={corPinCode}
+                    onChange={(e) => setCorPinCode(e.target.value)}
+                    icon={Navigation}
+                    label="Pin Code"
+                    required
+                  />
+                  <SelectWithLabel
+                    label="Area/Post Office"
+                    value={corArea}
+                    onValueChange={(value) => {
+                      setCorArea(value);
+                      console.log(value);
+                    }}
+                    options={corState}
+                    textKey="name"
+                    optionKey="name"
+                    icon={Building}
+                    blank
+                  />
+                  <LabelInput
+                    value={correspondingResult?.state}
+                    onChange={() => {}}
+                    icon={Map}
+                    label="State"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={correspondingResult?.block}
+                    onChange={() => {}}
+                    icon={LocateIcon}
+                    label="City"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={correspondingResult?.district}
+                    onChange={() => {}}
+                    icon={Navigation}
+                    label="District"
+                    required
+                    readonly
+                  />
+                  <LabelInput
+                    value={corHouseNo}
+                    onChange={(e) => setCorHouseNo(e.target.value)}
+                    icon={PiHouseLine}
+                    label="House No."
+                    required
+                  />
                 </div>
               </div>
             </div>
@@ -1119,7 +990,46 @@ export default function EmpUpdate() {
                       icon={AiOutlineUser}
                       className="custom-class" // Optional custom class
                     />
-
+                    <div>
+                      <Label className="floating-label  gap-[10px]">
+                        <span className="flex items-center gap-[10px]">
+                          <AiOutlineUser className="h-[18px] w-[18px]" />
+                          Date Of Birth
+                        </span>
+                      </Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={'outline'}
+                            className={cn(
+                              `${inputStyle} w-full justify-start hover:bg-transparent`,
+                              !empDOB && 'text-[#9e9e9e]',
+                            )}
+                          >
+                            <CalendarIcon className="w-4 h-4 mr-2" />
+                            {detail.dateOfJoining ? (
+                              format(detail?.dateOfJoining, 'PPP')
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={detail.dateOfJoining}
+                            onSelect={(value) =>
+                              handleInputEmpChange(
+                                index,
+                                'dateOfJoining',
+                                value,
+                              )
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                     <div>
                       <Label className="floating-label gap-[10px]">
                         <span className="flex items-center gap-[10px]">
@@ -1274,6 +1184,7 @@ interface LabelInputProps {
   required?: boolean;
   icon?: React.ElementType; // Use ElementType for component type
   blank?: boolean;
+  readonly?: boolean;
 }
 
 export const LabelInput: React.FC<LabelInputProps> = ({
@@ -1282,7 +1193,8 @@ export const LabelInput: React.FC<LabelInputProps> = ({
   label,
   required = false,
   icon: Icon,
-  blank = false, // Icon should be a component type
+  blank = false,
+  readOnly = false, // Icon should be a component type
 }) => {
   return (
     <div className="floating-label-group">
@@ -1291,6 +1203,7 @@ export const LabelInput: React.FC<LabelInputProps> = ({
         className={inputStyle}
         value={value}
         onChange={onChange}
+        readOnly={readOnly}
       />
       <label className="floating-label gap-[10px]">
         <span className="flex items-center gap-[10px] font-medium">
@@ -1314,6 +1227,7 @@ interface SelectWithLabelProps<T> {
   optionKey: keyof T; // Key to get the value for SelectItem
   className?: string; // Additional class names
   icon?: React.ElementType; // Optional icon component
+  blank?: boolean;
 }
 
 export const SelectWithLabel = <T extends Record<string, any>>({
@@ -1325,6 +1239,7 @@ export const SelectWithLabel = <T extends Record<string, any>>({
   optionKey,
   className = '',
   icon: Icon,
+  blank = false,
 }: SelectWithLabelProps<T>) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -1336,6 +1251,7 @@ export const SelectWithLabel = <T extends Record<string, any>>({
           {label}
         </span>
       </label>
+
       <Select value={value} onValueChange={onValueChange}>
         <SelectTrigger className={inputStyle} ref={buttonRef}>
           <SelectValue className="" placeholder="--" />
@@ -1347,6 +1263,11 @@ export const SelectWithLabel = <T extends Record<string, any>>({
             </SelectItem>
           ))}
         </SelectContent>
+        {blank && (
+          <p className="text-zinc-400 text-sm">
+            Select your area or post office after entering your pin code
+          </p>
+        )}
       </Select>
     </div>
   );
