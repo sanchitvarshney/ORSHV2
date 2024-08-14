@@ -4,10 +4,9 @@ import {
   CheckIcon,
   XCircle,
   XIcon,
-  WandSparkles,
   Search,
+  WandSparkles,
 } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -54,9 +53,9 @@ interface MultiSelectProps
     label: string;
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
-  }[] | [];
+  }[];
   onValueChange: (value: string[]) => void;
-  defaultValue?: string[];
+  value: string[];
   placeholder?: string;
   animation?: number;
   maxCount?: number;
@@ -73,8 +72,8 @@ export const MultipleSelect = React.forwardRef<
     {
       options,
       onValueChange,
+      value,
       variant,
-      defaultValue = [],
       placeholder = "Select options",
       animation = 0,
       maxCount = 3,
@@ -85,16 +84,14 @@ export const MultipleSelect = React.forwardRef<
     },
     ref
   ) => {
-    const [selectedValues, setSelectedValues] =
-      React.useState<string[]>(defaultValue);
+    const [selectedValues, setSelectedValues] = React.useState<string[]>(value);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
 
+    // Update selected values when the value prop changes
     React.useEffect(() => {
-      if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
-        setSelectedValues(defaultValue);
-      }
-    }, [defaultValue, selectedValues]);
+      setSelectedValues(value);
+    }, [value]);
 
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>
@@ -109,10 +106,10 @@ export const MultipleSelect = React.forwardRef<
       }
     };
 
-    const toggleOption = (value: string) => {
-      const newSelectedValues = selectedValues.includes(value)
-        ? selectedValues.filter((v) => v !== value)
-        : [...selectedValues, value];
+    const toggleOption = (optionValue: string) => {
+      const newSelectedValues = selectedValues.includes(optionValue)
+        ? selectedValues.filter((value) => value !== optionValue)
+        : [...selectedValues, optionValue];
       setSelectedValues(newSelectedValues);
       onValueChange(newSelectedValues);
     };
@@ -163,7 +160,7 @@ export const MultipleSelect = React.forwardRef<
                     return (
                       <Badge
                         key={value}
-                        className={`bg-teal-500 shadow-sm rounded-full  hover:bg-teal-400 py-[5px] px-[10px] text-slate-600  text-[15px] ${cn(
+                        className={`bg-teal-500 shadow-sm rounded-full hover:bg-teal-400 py-[5px] px-[10px] text-slate-600 text-[15px] ${cn(
                           isAnimating ? "animate-bounce" : "",
                           multiSelectVariants({ variant })
                         )}`}
@@ -183,11 +180,10 @@ export const MultipleSelect = React.forwardRef<
                       </Badge>
                     );
                   })}
-                  {selectedValues.length > maxCount && (
+                  {selectedValues?.length > maxCount && (
                     <Badge
                       className={cn(
-                        "rounded-full bg-transparent text-foreground border-foreground/1 hover:bg-transparent bg-white  shadow-none py-[5px] px-[10px] text-[15px]",
-                       
+                        "rounded-full bg-transparent text-foreground border-foreground/1 hover:bg-transparent bg-white shadow-none py-[5px] px-[10px] text-[15px]",
                         multiSelectVariants({ variant })
                       )}
                       style={{ animationDuration: `${animation}s` }}
@@ -229,76 +225,71 @@ export const MultipleSelect = React.forwardRef<
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className={cn("min-w-[600px] p-0 shadow-sm shadow-stone-500 ",PannelClassName)}
+          className={cn("min-w-[600px] p-0 shadow-sm shadow-stone-500 ", PannelClassName)}
           align="start"
           onEscapeKeyDown={() => setIsPopoverOpen(false)}
         >
           <Command className="min-w-full">
-           {options.length != 0 && <CommandInput
-              placeholder="Search..."
-              onKeyDown={handleInputKeyDown}
-            />}
+            {options?.length > 0 && (
+              <CommandInput
+                placeholder="Search..."
+                onKeyDown={handleInputKeyDown}
+              />
+            )}
             <CommandList className="min-w-full">
               <CommandEmpty>No results found.</CommandEmpty>
-              {
-                  options.length <= 0 ?
-                  <p className="text-slate-500 my-[20px] mx-[20px] text-center">Options not found</p>
-                  :(
-                    <CommandGroup className="w-full">
-                    <CommandItem
-                      key="all"
-                      onSelect={toggleAll}
-                      className="w-full min-w-full cursor-pointer"
+              {options.length === 0 ? (
+                <p className="text-slate-500 my-[20px] mx-[20px] text-center">Options not found</p>
+              ) : (
+                <CommandGroup className="w-full">
+                  <CommandItem
+                    key="all"
+                    onSelect={toggleAll}
+                    className="w-full min-w-full cursor-pointer"
+                  >
+                    <div
+                      className={cn(
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        selectedValues.length === options.length
+                          ? "bg-teal-500 text-primary-foreground border-teal-500"
+                          : "opacity-50 [&_svg]:invisible"
+                      )}
                     >
-                      <div
-                        className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                          selectedValues?.length === options.length
-                            ? "bg-teal-500 text-primary-foreground border-teal-500"
-                            : "opacity-50 [&_svg]:invisible"
-                        )}
+                      <CheckIcon className="w-4 h-4" />
+                    </div>
+                    <span>(Select All)</span>
+                  </CommandItem>
+                  {options.map((option) => {
+                    const isSelected = selectedValues.includes(option.value);
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        onSelect={() => toggleOption(option.value)}
+                        className="cursor-pointer"
                       >
-                        <CheckIcon className="w-4 h-4" />
-                      </div>
-                      <span>(Select All)</span>
-                    </CommandItem>
-                    {
-                      
-                        options.map((option) => {
-                          const isSelected = selectedValues?.includes(option.value);
-                          return (
-                            <CommandItem
-                              key={option.value}
-                              onSelect={() => toggleOption(option.value)}
-                              className="cursor-pointer"
-                            >
-                              <div
-                                className={cn(
-                                  "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                                  isSelected
-                                    ? "bg-teal-500 text-white border-teal-500"
-                                    : "opacity-50 [&_svg]:invisible"
-                                )}
-                              >
-                                <CheckIcon className="w-4 h-4" />
-                              </div>
-                              {option.icon && (
-                                <option.icon className="w-4 h-4 mr-2 text-muted-foreground" />
-                              )}
-                              <span>{option.label}</span>
-                            </CommandItem>
-                          );
-                        })
-                      
-                    }
-                  </CommandGroup>
-                  )
-              }
-             
+                        <div
+                          className={cn(
+                            "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                            isSelected
+                              ? "bg-teal-500 text-white border-teal-500"
+                              : "opacity-50 [&_svg]:invisible"
+                          )}
+                        >
+                          <CheckIcon className="w-4 h-4" />
+                        </div>
+                        {option.icon && (
+                          <option.icon className="w-4 h-4 mr-2 text-muted-foreground" />
+                        )}
+                        <span>{option.label}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              )}
               <CommandSeparator />
               <CommandGroup>
                 <div className="flex items-center justify-between">
-                  {selectedValues?.length > 0 && (
+                  {selectedValues.length > 0 && (
                     <>
                       <CommandItem
                         onSelect={handleClear}
@@ -338,4 +329,4 @@ export const MultipleSelect = React.forwardRef<
   }
 );
 
-MultipleSelect.displayName = "MultiSelect";
+MultipleSelect.displayName = "MultipleSelect";
