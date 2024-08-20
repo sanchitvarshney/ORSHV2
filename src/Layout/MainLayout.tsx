@@ -53,6 +53,9 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   const { companies } = useSelector((state: RootState) => state.homePage);
   const [selectedCompany, setSelectedCompany] = useState<string>('');
 
+  let user = localStorage.getItem('loggedInUser') ?? 'null';
+  const data = JSON.parse(user);
+
   useEffect(() => {
     dispatch(fetchCompanies());
   }, [dispatch]);
@@ -127,7 +130,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                       </Avatar>
                       <Separator orientation="vertical" className="" />
                       <div className="flex flex-col font-[500] gap-0 text-white">
-                        Sachin Maurya
+                        {data?.firstName} {data?.lastName}
                         <span className="text-[13px] font-[400]">
                           Software Developer
                         </span>
@@ -144,6 +147,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 >
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuLabel onClick={()=> navigate("/profile")}>Profile</DropdownMenuLabel>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem>Support</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -218,6 +222,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 >
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuLabel onClick={()=> navigate("/profile")}>Profile</DropdownMenuLabel>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem>Support</DropdownMenuItem>
                   <DropdownMenuSeparator />

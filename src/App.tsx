@@ -20,6 +20,7 @@ import MessageInvitationPage from './components/shared/MessageInvitationPage';
 import Protected from '@/components/Protected';
 import { Toaster } from '@/components/ui/toaster';
 import EmpUpdate from '@/components/ui/EmpUpdate';
+import Profile from '@/components/shared/Profile';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -37,6 +38,16 @@ const router = createBrowserRouter([
       <Protected authentication>
         <MainLayout>
           <EmployeeData />
+        </MainLayout>
+      </Protected>
+    ),
+  },
+  {
+    path: '/profile',
+    element: (
+      <Protected authentication>
+        <MainLayout>
+          <Profile />
         </MainLayout>
       </Protected>
     ),
