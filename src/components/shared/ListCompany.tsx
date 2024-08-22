@@ -26,7 +26,7 @@ const ListCompany: React.FC = () => {
 
   const actionCellRenderer = (params: any) => {
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center pl-10">
         <Link
           to={`/company/${params.data.companyID}`} // Adjust the path as needed
           className="text-teal-500 hover:text-teal-600"

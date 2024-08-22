@@ -21,26 +21,22 @@ function Profile() {
 
   return (
     <div>
-      <AppPasswordDialog
-        open={showAppPasswordDialog}
-        hide={() => setAppPasswordDialog(false)}
-      />
       {user && (
         <div className="flex flex-col items-center mt-[50px]">
           <div className="w-3/4 flex flex-col gap-4">
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 items-center text-[25px] font-[650]">
                     <User />
                     {data?.firstName} {data?.lastName}
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-2">
-                <div className="flex justify-center">
+                <div className="flex">
                   <div className="flex gap-1">
-                    <div className="flex items-center gap-1 text-muted-foreground">
+                    <div className="flex items-center gap-1 text-muted-foregroundb text-[20px]">
                       <Building2 size={19} />
                       <strong>Company : </strong>
                     </div>
@@ -88,27 +84,11 @@ function Profile() {
                     value={recruitmentEmail}
                     editable
                     notVerified
-                    extra={
-                      <div className=''>
-                        <Button
-                          onClick={() => setAppPasswordDialog(true)}
-                          variant="link"
-                        >
-                          Set App Password
-                        </Button>
-                      </div>
-                    }
                     onUpdate={(newValue) => {
                       setRecruitmentEmail(newValue);
                       updateUserData('recruitmentEmail', newValue);
                     }}
                   />
-                </div>
-                <div className="h-[2px] w-full bg-muted my-2" />
-                <div className="flex flex-col">
-                  <div>
-                    <Button variant="outline">Update Password</Button>
-                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -152,19 +132,21 @@ const SingleItem = ({
   };
 
   return (
-    <div className="flex flex-col gap-0 ">
+    <div className="flex flex-col gap-0">
       <div className="flex items-center gap-1 justify-between text-muted-foreground">
         <div className="flex gap-1 items-center ">
           {icon}
           <strong>{label}</strong>
         </div>
         {notVerified && (
-          <div className='bg-white text-black'>
+          <div className="bg-white text-black">
             <IconButton
               tooltip={
                 <div className="flex items-center p-2 flex-col gap-2 w-[200px] bg-white text-black">
                   <p className="font-semibold">{label} is not verified</p>
-                  <Button className="w-full h-[27px] bg-teal-500 hover:bg-teal-600 shadow-neutral-400">Verify</Button>
+                  <Button className="w-full h-[27px] bg-teal-500 hover:bg-teal-600 shadow-neutral-400">
+                    Verify
+                  </Button>
                 </div>
               }
               color="text-yellow-700"
@@ -209,8 +191,8 @@ const SingleItem = ({
 
 const InfoCard = () => {
   return (
-    <div className="rounded-lg border border-border p-5 w-full">
-      <div className="text-muted-foreground mb-4 justify-center flex">
+    <div className="rounded-lg border border-border p-5 w-full bg-amber-50">
+      <div className="text-muted-foreground mb-4 flex">
         <Info size={20} />
       </div>
       <ul className="flex flex-col gap-2 text-muted-foreground">

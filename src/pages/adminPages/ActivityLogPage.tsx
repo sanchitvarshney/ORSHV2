@@ -79,12 +79,15 @@ const ActivityLogPage: React.FC = () => {
       </button>
     </div>
   );
-
+  const indexCellRenderer = (params: any) => {
+    return params.node.rowIndex + 1;
+  };
   const enhancedColumns = [
     {
       headerName: '#',
-      field: 'value',
+      field: 'index',
       headerClass: 'custom-header',
+      valueGetter: indexCellRenderer,
       filter: false,
       maxWidth: 50,
     },
@@ -131,7 +134,7 @@ const ActivityLogPage: React.FC = () => {
         onClose={() => setIsDialogOpen(false)}
         onConfirm={handleConfirmDelete}
         title="Delete Activity Log"
-        description="Are you sure you want to delete this Activity Log?"
+        description="Are you sure you want to delete this Activity Log? Please note that all records associated with this file will also be deleted."
       />
     </div>
   );

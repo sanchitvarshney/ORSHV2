@@ -27,8 +27,7 @@ export function AlertDialogPopup({
 }: AlertDialogPopupProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogTrigger asChild>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger asChild></AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -37,7 +36,7 @@ export function AlertDialogPopup({
         <AlertDialogFooter>
           <AlertDialogAction
             onClick={onConfirm}
-            className="bg-teal-500 hover:bg-teal-600 shadow-neutral-400"
+            className="bg-red-600 hover:bg-red-600 shadow-neutral-400"
           >
             Delete
           </AlertDialogAction>

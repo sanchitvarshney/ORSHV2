@@ -4,7 +4,7 @@ export const columnDefs: ColDef[] = [
   { headerName: 'First Name', field: 'firstName', sortable: true, filter: true },
   { headerName: 'Last Name', field: 'lastName', sortable: true, filter: true },
   { headerName: 'Phone', field: 'mobile', sortable: true, filter: true },
-  { headerName: 'E-mail', field: 'email', sortable: true, filter: true },
+  { headerName: 'E-mail', field: 'email', sortable: true, filter: true,width:210 },
   { headerName: 'Company', field: 'companyName', sortable: true, filter: true },
   { headerName: 'Branch', field: 'branchName', sortable: true, filter: true },
 ];

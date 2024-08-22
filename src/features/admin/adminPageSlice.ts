@@ -185,6 +185,7 @@ interface AdminPageState {
   corPincode: PinCode[] | null;
   perPincode: PinCode[] | null;
   workerInfo: [] | null;
+  companyInfo: [] | null;
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
@@ -203,6 +204,7 @@ const initialState: AdminPageState = {
   workers: [],
   branches: [],
   workerInfo: [],
+  companyInfo: [],
   corPincode: [],
   perPincode: [],
   loading: 'idle',
@@ -324,7 +326,7 @@ export const getEducationStatus = createAsyncThunk<DesignationResponse, void>(
 );
 
 export const updateEmployeeDetails = createAsyncThunk<
-  UpdateEmployeeResponse, 
+  UpdateEmployeeResponse,
   any,
   { rejectValue: string }
 >(
@@ -489,6 +491,29 @@ export const getCompanyBranchOptions = createAsyncThunk<
     }
   },
 );
+
+export const getCompanyInfo = createAsyncThunk<BranchInfoResponse, string>(
+  'adminPage/getCompanyInfo',
+  async (companyID, { rejectWithValue }) => {
+    try {
+      console.log(companyID, 'iidd');
+      const response = await orshAxios.get<BranchInfoResponse>(
+        baseLink + `company/getDetails?companyID=${companyID}`,
+      );
+      if (!response.data.success) {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: response.data.message,
+        });
+      }
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch workers');
+    }
+  },
+);
+
 interface GetLocationsParams {
   pinCode: string;
   addressType: 'permanent' | 'corresponding';
@@ -646,6 +671,11 @@ const adminPageSlice = createSlice({
       .addCase(getCompanyBranchOptions.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.branches = action.payload.data;
+        state.error = null;
+      })
+      .addCase(getCompanyInfo.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.companyInfo = action.payload.data;
         state.error = null;
       })
       .addCase(getLocationsFromPinCode.fulfilled, (state, action) => {

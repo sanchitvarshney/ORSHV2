@@ -396,14 +396,14 @@ export default function EmpUpdate() {
             Update Employee Details
           </p>
           <div className="flex gap-2">
-            <Button
+            {/* <Button
               // variant="secondary"
               variant="outline"
               icon={<RefreshCcw size={`18`} />}
               onClick={() => {}}
             >
               Reset
-            </Button>
+            </Button> */}
             <Button
               type="button"
               onClick={() => {
@@ -563,13 +563,13 @@ export default function EmpUpdate() {
           </CardHeader>
           <CardContent className="py-[10px] overflow-x-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-              <div className="flex flex-col gap-y-2 lg:pr-2 border-b pb-4 lg:border-b-0 lg:pb-0 lg:border-r">
-                <div>
+              <Card className="flex flex-col gap-y-2 lg:pr-2 border shadow-none">
+                <CardHeader>
                   <p className="text-lg font-semibold text-muted-foreground">
                     Permanent Address
                   </p>
-                </div>
-                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
+                </CardHeader>
+                <CardContent className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
                   <LabelInput
                     value={perPinCode}
                     onChange={(e) => setPerPinCode(e.target.value)}
@@ -617,10 +617,10 @@ export default function EmpUpdate() {
                     label="House No."
                     required
                   />
-                </div>
-              </div>
-              <div className="flex flex-col gap-y-2">
-                <div className="flex flex-col gap-y-2 2xl:flex-row justify-between">
+                </CardContent>
+              </Card>
+              <Card className="flex flex-col gap-y-2 border shadow-none">
+                <CardHeader className="flex flex-col gap-y-2 2xl:flex-row justify-between">
                   <p className="text-lg font-semibold text-muted-foreground">
                     Corresponding Address
                   </p>
@@ -639,9 +639,9 @@ export default function EmpUpdate() {
                       Same as permanent address
                     </label>
                   </div>
-                </div>
+                </CardHeader>
 
-                <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
+                <CardContent className="grid gap-2 grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3">
                   <LabelInput
                     value={corPinCode}
                     onChange={(e) => setCorPinCode(e.target.value)}
@@ -689,8 +689,8 @@ export default function EmpUpdate() {
                     label="House No."
                     required
                   />
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
           </CardContent>
         </Card>
@@ -749,7 +749,7 @@ export default function EmpUpdate() {
               {children.map((child, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-3 gap-2 pb-3 my-2"
+                  className="grid grid-cols-1 lg:grid-cols-4 2xl:grid-cols-4 gap-2 pb-3 my-2"
                 >
                   <LabelInput
                     value={child.childName}
@@ -792,7 +792,7 @@ export default function EmpUpdate() {
                     className="custom-class" // Optional custom class
                   />
 
-                  <div className="row-span-3 flex justify-center">
+                  <div className="row-span-3 flex justify-center pl-8 h-fit">
                     <IconButton
                       onClick={() => removeChild(index)}
                       icon={<Trash2 size={18} />}
