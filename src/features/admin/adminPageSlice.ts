@@ -224,6 +224,18 @@ export const addCompany = createAsyncThunk(
   },
 );
 
+export const addClient = createAsyncThunk(
+  'adminPage/addClient',
+  async (clientData: {}, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.post('/client/add', clientData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to add client');
+    }
+  },
+);
+
 // Define the async thunk for fetching companies
 export const searchCompanies = createAsyncThunk<CompanyResponse, void>(
   'adminPage/searchCompanies',

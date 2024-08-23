@@ -62,6 +62,7 @@ interface MultiSelectProps
   asChild?: boolean;
   className?: string;
   PannelClassName?: string;
+  handleSubmit?:()=>void;
 }
 
 export const MultipleSelect = React.forwardRef<
@@ -80,6 +81,7 @@ export const MultipleSelect = React.forwardRef<
       asChild = false,
       className,
       PannelClassName,
+      handleSubmit,
       ...props
     },
     ref
@@ -305,10 +307,10 @@ export const MultipleSelect = React.forwardRef<
                   )}
                   <CommandSeparator />
                   <CommandItem
-                    onSelect={() => setIsPopoverOpen(false)}
+                    onSelect={() =>{ setIsPopoverOpen(false);handleSubmit&&handleSubmit()}}
                     className="justify-center flex-1 cursor-pointer"
                   >
-                    Close
+                    Submit
                   </CommandItem>
                 </div>
               </CommandGroup>

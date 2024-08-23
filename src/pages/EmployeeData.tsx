@@ -93,7 +93,7 @@ const EmployeeData: React.FC = () => {
 
   // useEffect(() => {
   // const fetchFilteredData = async () => {
-  const payload = {
+  const payload: any = {
     company: selectedCompanies,
     location: selectedLocations,
     gender: selectedGenders,
@@ -104,7 +104,9 @@ const EmployeeData: React.FC = () => {
     excludePreviousIndustry,
     limit: 100,
   };
-
+  const handleSubmit = () => {
+    dispatch(advancedFilter(payload));
+  };
   //   try {
   //     await dispatch(advancedFilter(payload));
   //     console.log('Filter applied successfully');
@@ -144,6 +146,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -160,6 +163,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -176,6 +180,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -192,6 +197,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -208,6 +214,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -224,6 +231,7 @@ const EmployeeData: React.FC = () => {
                   className="w-full"
                   PannelClassName="min-w-[320px]"
                   maxCount={2}
+                  handleSubmit={handleSubmit}
                 />
               </AccordionContent>
             </AccordionItem>
@@ -266,7 +274,7 @@ const EmployeeData: React.FC = () => {
             />
             <Button
               className="bg-teal-700 shadow-sm hover:bg-teal-600 shadow-neutral-500"
-              onClick={() => dispatch(advancedFilter(payload))}
+              onClick={handleSubmit}
             >
               Fetch
             </Button>

@@ -33,7 +33,7 @@ function Profile() {
     if (userProfile.length > 0) {
       setMobile(userProfile[0]?.phoneNumber || '');
       setEmail(userProfile[0]?.email || '');
-      setSupportEmail(userProfile[0]?.supportEmail || '');
+      setSupportEmail(userProfile[0]?.emailSupport || '');
       setRecruitmentEmail(userProfile[0]?.emailRecruitment || '');
     }
   }, [userProfile]);

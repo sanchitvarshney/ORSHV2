@@ -307,11 +307,12 @@ const DropDown = (props: PropTypes) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="group">
-          {/* <Link
-            to={routeConstatns.admin.company.update.replace(
-              ':id',
-              props.params?.id ?? '--',
-            )}
+          <Link
+          to="_blank"
+            // to={routeConstatns.admin.company.update.replace(
+            //   ':id',
+            //   props.params?.id ?? '--',
+            // )}
             className="flex items-center gap-2"
           >
             <Edit
@@ -319,7 +320,7 @@ const DropDown = (props: PropTypes) => {
               className="text-muted-foreground group-hover:text-white"
             />
             Update Company
-          </Link> */}
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
