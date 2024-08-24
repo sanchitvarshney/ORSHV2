@@ -64,47 +64,48 @@ const NotificationSheet: React.FC<Props> = ({ uiState }) => {
         </div>
         <div className="h-[calc(100vh-170px)] overflow-y-auto flex flex-col gap-[10px] px-[10px] py-[20px]">
           {notifications?.length > 0 ? (
-            notifications?.map((notification: any, index: any) => (
-              <Card key={index} className="p-0 rounded-md">
-                <CardHeader className="p-[10px] flex justify-between flex-row">
-                  <div>
-                    <CardTitle className="text-slate-600">
-                      {notification.title}
-                    </CardTitle>
-                    <CardDescription>{notification.message}</CardDescription>
-                  </div>
-                  <div>
-                    <Badge
-                      className={`h-[12px] w-[12px] rounded-full ${
-                        notification.type === 'balance'
-                          ? 'bg-red-300'
-                          : 'bg-blue-300'
-                      } p-0`}
-                    />
-                  </div>
-                </CardHeader>
-                <CardContent className="p-[10px] m-0">
-                  <div className="flex items-center justify-between mb-[10px]">
-                    <div className="flex gap-[5px] text-slate-600 font-[500]">
+            [...notifications]
+              .reverse()
+              .map((notification: any, index: any) => (
+                <Card key={index} className="p-0 rounded-md">
+                  <CardHeader className="p-[10px] flex justify-between flex-row">
+                    <div>
+                      <CardTitle className="text-slate-600">
+                        {notification.title}
+                      </CardTitle>
+                      <CardDescription>{notification.message}</CardDescription>
+                    </div>
+                    <div>
+                      <Badge
+                        className={`h-[12px] w-[12px] rounded-full ${
+                          notification.type === 'balance'
+                            ? 'bg-red-300'
+                            : 'bg-blue-300'
+                        } p-0`}
+                      />
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-[10px] m-0">
+                    <div className="flex items-center justify-between mb-[10px]">
+                      {/* <div className="flex gap-[5px] text-slate-600 font-[500]">
                       <Avatar className="h-[30px] w-[30px]">
                         <AvatarImage src="https://github.com/shadcn.png" />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      {/* Assuming you want to display the sender's name or similar info */}
                       Sender Name
+                    </div> */}
+                      <div>
+                        <p className="text-[14px] text-slate-600">
+                          {notification.notiInsertedAt}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[14px] text-slate-600">
-                        {notification.notiInsertedAt}
-                      </p>
+                    <div className="w-full bg-blue-100 rounded-md p-[5px] text-slate-600">
+                      <p className="text-[14px]">{notification.message}</p>
                     </div>
-                  </div>
-                  <div className="w-full bg-blue-100 rounded-md p-[5px] text-slate-600">
-                    <p className="text-[14px]">{notification.message}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
+                  </CardContent>
+                </Card>
+              ))
           ) : (
             <p className="text-center text-slate-600">
               No notifications available

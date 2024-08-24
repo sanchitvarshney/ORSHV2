@@ -72,7 +72,9 @@ const HomePage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [companiesArray, setCompaniesArray] = useState<string[]>([]);
-  const { searchCompanies,loading } = useSelector((state: RootState) => state.homePage);
+  const { searchCompanies, loading } = useSelector(
+    (state: RootState) => state.homePage,
+  );
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -117,7 +119,7 @@ const HomePage: React.FC = () => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     navigate('/employee-list');
-    const payload:any = {
+    const payload: any = {
       company: companiesArray,
       excludePreviousCompany: false, // Adjust as needed
       excludePreviousIndustry: false, // Adjust as needed
@@ -284,10 +286,21 @@ const HomePage: React.FC = () => {
                                 <SelectValue placeholder="Select Filter" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="system">System</SelectItem>
-                                <SelectItem value="empty">Empty</SelectItem>
+                                <SelectItem value="company">
+                                  Company Wise
+                                </SelectItem>
+                                <SelectItem value="state">
+                                  State Wise
+                                </SelectItem>
+                                <SelectItem value="district">
+                                  District Wise
+                                </SelectItem>
+                                <SelectItem value="industry">
+                                  Industry Wise
+                                </SelectItem>
+                                <SelectItem value="gender">
+                                  Gender Wise
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </div>

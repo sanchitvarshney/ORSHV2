@@ -5,14 +5,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 // Define the state interface
 interface ProfileState {
   userProfile: any[];
-  loading: 'idle' | 'loading' | 'succeeded' | 'failed';
+  loading: boolean;
   error: string | null;
 }
 
 // Define initial state
 const initialState: ProfileState = {
   userProfile: [],
-  loading: 'idle',
+  loading: false,
   error: null,
 };
 
@@ -128,15 +128,15 @@ const profilePageSlice = createSlice({
     builder
       // Handle fetchUserProfile actions
       .addCase(fetchUserProfile.pending, (state) => {
-        state.loading = 'loading';
+        state.loading = true;
         state.error = null;
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
+        state.loading = false;
         state.userProfile = action.payload;
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.loading = 'failed';
+        state.loading = false;
         state.error = action.payload as string;
       });
   },

@@ -13,10 +13,11 @@ import {
   sentOtp,
   verifyOtp,
 } from '@/features/profile/profilePageSlice';
+import Loading from '@/components/reusable/Loading';
 
 function Profile() {
   const dispatch = useDispatch<AppDispatch>();
-  const { userProfile } = useSelector((state: RootState) => state.profilePage);
+  const { userProfile,loading } = useSelector((state: RootState) => state.profilePage);
   const [mobile, setMobile] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [supportEmail, setSupportEmail] = useState<string>('');
@@ -58,11 +59,12 @@ function Profile() {
     setFieldToVerify(type);
     setValueToVerify(value);
     dispatch(sentOtp({ body: { [field]: value }, type: `${type}=true` }));
-    setShowOtpModal(true); // Show OTP modal
+    setShowOtpModal(true);
   };
 
   return (
     <div>
+      {loading && <Loading />}
       {userProfile && (
         <div className="flex flex-col items-center mt-[50px]">
           <div className="w-3/4 flex flex-col gap-4">
