@@ -12,7 +12,7 @@ import { Ref } from 'react';
 
 import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
-interface propType<T extends FieldValues> {
+interface MyFormFieldProps<T extends FieldValues> {
   control: Control<T>;
   label: string;
   name: Path<T>;
@@ -27,7 +27,7 @@ interface propType<T extends FieldValues> {
   float?: boolean;
   disabled?: boolean;
   rows?: number;
-  ref?: Ref<HTMLTextAreaElement>;
+  ref?: Ref<HTMLTextAreaElement | HTMLInputElement>;
 }
 
 function MyFormField<T extends FieldValues>({
@@ -46,10 +46,9 @@ function MyFormField<T extends FieldValues>({
   disabled,
   rows,
   ref,
-}: propType<T>) {
+}: MyFormFieldProps<T>) {
   const { field } = useController({ name, control });
   const onChange = async (event: any) => {
-    console.log('these are the evet files', event);
     if (event.target.files?.[0]) {
       field.onChange(event.target.files[0]);
     }
@@ -64,6 +63,7 @@ function MyFormField<T extends FieldValues>({
       return field.onChange(event.target.value);
     }
   };
+
   return (
     <FormField
       control={control}
@@ -80,8 +80,7 @@ function MyFormField<T extends FieldValues>({
                   disabled={disabled}
                   rows={rows}
                   onChange={onChange}
-                  // {...field}
-                  ref={ref}
+                  ref={ref as Ref<HTMLTextAreaElement>} // Type casting for textarea
                 />
               ) : type === 'file' ? (
                 <Input
@@ -92,9 +91,7 @@ function MyFormField<T extends FieldValues>({
                   onChange={onChange}
                   placeholder={placeholder}
                   disabled={disabled}
-                  ref={ref}
-                  // accept={type === "file" ? ".pdf" : ""}
-                  // {...field}
+                  ref={ref as Ref<HTMLInputElement>} // Type casting for file input
                 />
               ) : (
                 <Input
@@ -106,7 +103,7 @@ function MyFormField<T extends FieldValues>({
                   placeholder={placeholder}
                   {...field}
                   disabled={disabled}
-                  ref={ref}
+                  ref={ref as Ref<HTMLInputElement>} // Type casting for standard input
                   onChange={onChange}
                 />
               )}
@@ -115,7 +112,6 @@ function MyFormField<T extends FieldValues>({
           {description && (
             <FormDescription className="mt-4">{description}</FormDescription>
           )}
-
           <FormMessage />
         </FormItem>
       )}
