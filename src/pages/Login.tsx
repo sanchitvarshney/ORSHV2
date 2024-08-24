@@ -19,25 +19,29 @@ import { PasswordInput } from '@/components/ui/passwordInput';
 import { inputStyle } from '@/style/CustomStyles';
 import { login } from '@/features/auth/authSlice';
 import { AppDispatch } from '@/store';
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from '@/components/ui/use-toast';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { toast } = useToast();
 
-   const handleSubmit = async (e: React.FormEvent) => {
-     e.preventDefault();
-     dispatch(login({ userName: email, password })).then((response: any) => {
-       if (response.payload.success) {
-         navigate('/');
-         toast({ title: 'Success!!', description: response.payload.message });
-       }
-     });
-   };
-   
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(login({ userName: email, password })).then((response: any) => {
+      if (response.payload.success) {
+        localStorage.setItem(
+          'loggedInUser',
+          JSON.stringify(response?.payload?.data),
+        );
+        navigate('/');
+        toast({ title: 'Success!!', description: response.payload.message });
+      }
+    });
+  };
+
   return (
     <Wrapper className="h-[100vh] w-[100vw] grid grid-cols-2">
       <div className="overflow-hidden max-h-[100vh] flex justify-center items-center left">
@@ -57,7 +61,9 @@ const Login: React.FC = () => {
                   required
                   className={inputStyle}
                 />
-                <Label htmlFor="email" className='floating-label'>E-Mail / Phone Number</Label>
+                <Label htmlFor="email" className="floating-label">
+                  E-Mail / Phone Number
+                </Label>
               </div>
               <div className="grid gap-2 floating-label-group">
                 <PasswordInput
@@ -68,7 +74,9 @@ const Login: React.FC = () => {
                   className={`${inputStyle} input`}
                   required
                 />
-                <Label htmlFor="password" className='floating-label'>Password</Label>
+                <Label htmlFor="password" className="floating-label">
+                  Password
+                </Label>
               </div>
               <div className="flex items-center mt-[-20px]">
                 <Link
@@ -82,7 +90,7 @@ const Login: React.FC = () => {
                 type="submit"
                 className="w-full bg-teal-700 hover:bg-teal-600"
               >
-                  Login
+                Login
               </Button>
             </form>
             <div className="mt-4 text-sm text-center">
@@ -191,6 +199,5 @@ const Wrapper = styled.div`
   .row {
     margin-top: 50px;
   }
-
 `;
 export default Login;

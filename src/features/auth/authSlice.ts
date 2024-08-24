@@ -61,8 +61,8 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
       state.loading = 'idle';
-      localStorage.removeItem('loggedInUser'); // Clear user data from local storage
-      localStorage.clear();
+      // localStorage.removeItem('loggedInUser'); // Clear user data from local storage
+      // localStorage.clear();
     },
   },
   extraReducers: (builder) => {
