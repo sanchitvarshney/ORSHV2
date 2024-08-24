@@ -122,7 +122,7 @@ const ActivityLogPage: React.FC = () => {
       </div>
       <div className="ag-theme-quartz h-[calc(100vh-120px)]">
         <AgGridReact
-          suppressCellFocus={false}
+          suppressCellFocus={true}
           defaultColDef={defaultColDef}
           columnDefs={enhancedColumns}
           rowData={rowData}

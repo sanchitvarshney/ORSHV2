@@ -56,9 +56,10 @@ export default function companyInfo() {
 
   console.log(companyInfo);
   useEffect(() => {
-    dispatch(getCompanyInfo(params?.id));
-    dispatch(getCompanyBranchOptions(params?.id));
+    params?.id && dispatch(getCompanyInfo(params?.id));
+    params?.id && dispatch(getCompanyBranchOptions(params?.id));
   }, []);
+
   return (
     <div className="flex-1 bg-white flex flex-col gap-6 border rounded-lg p-8">
       <AddClient
@@ -79,10 +80,9 @@ export default function companyInfo() {
       />
       <div className="flex justify-between items-center border-b-2 border-b-muted ">
         <div className="flex gap-2 items-center ml-[-10px]">
-          {/* <MyButton variant="goBack" /> */}
           <div className="flex gap-1 items-center">
             <Building2 />
-            <p className="font-semibold text-xl">{details?.name}</p>
+            <p className="font-semibold text-xl">{details[0]?.name}</p>
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -155,25 +155,15 @@ export default function companyInfo() {
               <Building2 size={20} />
               <p className="font-semibold text-xl ">Branches</p>
             </div>
-            {/* <IconButton
-              onClick={() => setShowAddBranchDialog(true)}
-              size="sm"
-              icon={<PlusIcon size={18} />}
-              background="bg-primary"
-              tooltip="Add Branch"
-              hoverBackground="hover:bg-accent"
-              hoverColor="hover:text-white"
-              color="text-white"
-            /> */}
           </div>
           <p className="text-lg ml-2 text-muted-foreground">
-            ({branches?.length} Found)
+            ({branches?.length ?? 0} Found)
           </p>
         </div>
         <div className="max-h-[600px] overflow-y-auto">
           {/* {!loading("fetch") && ( */}
           <Accordion type="single" collapsible>
-            {branches?.map((row, index) => (
+            {branches?.map((row: any, index: any) => (
               <AccordionItem
                 value={row.branchID}
                 className="border-b-2 border-b-muted "
@@ -296,10 +286,7 @@ const DropDown = (props: PropTypes) => {
           onClick={() => props.setShowAddClientDialog(true)}
         >
           <div className="flex  items-center gap-1">
-            <User
-              size={18}
-              className="text-muted-foreground group-hover:text-white"
-            />
+            <User size={18} className="text-muted-foreground" />
             Add As Client
           </div>
         </DropdownMenuItem>
@@ -309,10 +296,7 @@ const DropDown = (props: PropTypes) => {
           onClick={() => props.setShowUpdateComDialog(true)}
         >
           <div className="flex items-center gap-2">
-            <Edit
-              size={16}
-              className="text-muted-foreground group-hover:text-white"
-            />
+            <Edit size={16} className="text-muted-foreground" />
             Update Company
           </div>
         </DropdownMenuItem>
@@ -322,10 +306,7 @@ const DropDown = (props: PropTypes) => {
           onClick={() => props.setShowAddBranchDialog(true)}
         >
           <div className="flex items-center gap-1 ">
-            <PlusIcon
-              size={18}
-              className="text-muted-foreground group-hover:text-white"
-            />
+            <PlusIcon size={18} className="text-muted-foreground" />
             Add Branch
           </div>
         </DropdownMenuItem>

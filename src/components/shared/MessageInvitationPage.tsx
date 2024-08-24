@@ -14,7 +14,7 @@ const MessageInvitationPage: React.FC = () => {
     <Wrapper>
       <div className="ag-theme-quartz h-[calc(100vh-190px)]">
         <AgGridReact
-          suppressCellFocus={false}
+          suppressCellFocus={true}
           defaultColDef={defaultColDef}
           columnDefs={columnDefs}
           rowData={dummyData}

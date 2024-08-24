@@ -46,12 +46,19 @@ function Profile() {
       field === 'recruitmentEmail'
     ) {
       setFieldToVerify(type);
-      setShowOtpModal(true);
       setValueToVerify(value);
       dispatch(sentOtp({ body: { [field]: value }, type: `${type}=true` }));
+      setShowOtpModal(true); // Show OTP modal
     } else {
       dispatch(changePassword({ body: { [field]: value }, type }));
     }
+  };
+
+  const handleVerifyClick = (field: string, value: string, type: string) => {
+    setFieldToVerify(type);
+    setValueToVerify(value);
+    dispatch(sentOtp({ body: { [field]: value }, type: `${type}=true` }));
+    setShowOtpModal(true); // Show OTP modal
   };
 
   return (
@@ -90,6 +97,7 @@ function Profile() {
                       setMobile(newValue);
                       updateUserData('mobile', newValue, 'mobile');
                     }}
+                    onVerify={() => handleVerifyClick('phoneNumber', mobile, 'mobile')}
                   />
                   <SingleItem
                     label="E-Mail"
@@ -101,6 +109,7 @@ function Profile() {
                       setEmail(newValue);
                       updateUserData('email', newValue, 'email');
                     }}
+                    onVerify={() => handleVerifyClick('email', email, 'email')}
                   />
                   <SingleItem
                     label="Support E-mail"
@@ -112,6 +121,7 @@ function Profile() {
                       setSupportEmail(newValue);
                       updateUserData('email', newValue, 'supportEmail');
                     }}
+                    onVerify={() => handleVerifyClick('emailSupport', supportEmail, 'supportEmail')}
                   />
                   <SingleItem
                     label="Recruitment E-mail"
@@ -123,6 +133,7 @@ function Profile() {
                       setRecruitmentEmail(newValue);
                       updateUserData('email', newValue, 'recruitmentEmail');
                     }}
+                    onVerify={() => handleVerifyClick('emailRecruitment', recruitmentEmail, 'recruitmentEmail')}
                   />
                 </div>
               </CardContent>
@@ -157,6 +168,7 @@ interface PropTypes {
   notVerified?: string;
   extra?: ReactNode;
   onUpdate?: (newValue: string) => void;
+  onVerify?: () => void; // Added onVerify prop
 }
 
 const SingleItem = ({
@@ -167,25 +179,34 @@ const SingleItem = ({
   notVerified,
   extra,
   onUpdate,
+  onVerify, // Destructure onVerify
 }: PropTypes) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    setInputValue(value); // Update inputValue when value changes
+    setHasChanges(false); // Reset change flag when value is updated from outside
+  }, [value]);
 
   const handleSave = () => {
     if (onUpdate) {
       onUpdate(inputValue);
     }
     setIsEditing(false);
+    setHasChanges(false); // Reset change flag after saving
   };
-  
-  useEffect(() => {
-    setInputValue(value); // Update inputValue when value changes
-  }, [value]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    setHasChanges(true); // Mark as changed when user types
+  };
 
   return (
     <div className="flex flex-col gap-0">
       <div className="flex items-center gap-1 justify-between text-muted-foreground">
-        <div className="flex gap-1 items-center ">
+        <div className="flex gap-1 items-center">
           {icon}
           <strong>{label}</strong>
         </div>
@@ -198,7 +219,7 @@ const SingleItem = ({
                   <p className="font-semibold">{label} is not verified</p>
                   <Button
                     className="w-full h-[27px] bg-teal-500 hover:bg-teal-600 shadow-neutral-400"
-                    onClick={() => setIsEditing(true)}
+                    onClick={onVerify} // Trigger OTP modal
                   >
                     Verify
                   </Button>
@@ -218,10 +239,15 @@ const SingleItem = ({
           <>
             <Input
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleInputChange}
               className="flex-1"
             />
-            <Button variant="outline" onClick={handleSave} className="ml-2">
+            <Button
+              variant="outline"
+              onClick={handleSave}
+              className="ml-2"
+              disabled={!hasChanges} // Disable save button if no changes
+            >
               <Check size={16} />
             </Button>
           </>

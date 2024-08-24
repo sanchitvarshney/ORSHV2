@@ -41,6 +41,7 @@ interface HomePageState {
   selectedCompany: Company | null;
   error: string | null;
   advancedFilter: AdvancedFilterPayload[] | null;
+  notifications: [];
   loading: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
@@ -51,6 +52,7 @@ const initialState: HomePageState = {
   selectedCompany: null,
   error: null,
   advancedFilter: [],
+  notifications: [],
   loading: 'idle',
 };
 
@@ -62,6 +64,18 @@ export const fetchCompanies = createAsyncThunk<CompanyResponse, void>(
       const response = await orshAxios.get<CompanyResponse>(
         '/fetch/companyList',
       );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch companies');
+    }
+  },
+);
+
+export const fetchNotifications = createAsyncThunk<[], void>(
+  'homePage/fetchNotifications',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<[]>('/fetch/notifications');
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to fetch companies');
@@ -141,6 +155,11 @@ const homePageSlice = createSlice({
       .addCase(fetchSearchCompanies.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
+      })
+      .addCase(fetchNotifications.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.notifications = action.payload.data;
+        state.error = null;
       })
       .addCase(advancedFilter.fulfilled, (state, action) => {
         state.loading = 'succeeded';

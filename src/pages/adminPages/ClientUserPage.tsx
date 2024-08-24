@@ -28,6 +28,7 @@ const ClientUserPage: React.FC = () => {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={true}
+        suppressCellFocus={true}
       />
     </div>
   );

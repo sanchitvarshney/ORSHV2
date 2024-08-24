@@ -70,7 +70,8 @@ const ListWorker: React.FC = () => {
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
               pagination={true}
-              context={{ toggleShowDetails }} // Pass the handler function
+              context={{ toggleShowDetails }}
+              suppressCellFocus={true}
             />
           </div>
         </div>

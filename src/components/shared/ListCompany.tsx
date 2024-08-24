@@ -6,6 +6,8 @@ import { searchCompanies } from '@/features/admin/adminPageSlice';
 import { ColDef } from 'ag-grid-community';
 import Loading from '@/components/reusable/Loading';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { IoMdDownload } from 'react-icons/io';
 
 const ListCompany: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -26,7 +28,7 @@ const ListCompany: React.FC = () => {
 
   const actionCellRenderer = (params: any) => {
     return (
-      <div className="flex justify-center pl-10">
+      <div className="flex">
         <Link
           to={`/company/${params.data.companyID}`} // Adjust the path as needed
           className="text-teal-500 hover:text-teal-600"
@@ -49,17 +51,27 @@ const ListCompany: React.FC = () => {
     { headerName: 'Email', field: 'email' },
     { headerName: 'Mobile', field: 'mobile' },
     { headerName: 'Website', field: 'website' },
-    { headerName: 'Active Status', field: 'activeStatus' },
+    {
+      headerName: 'Active Status',
+      field: 'activeStatus',
+      valueGetter: (params) => (params.data.activeStatus === "true" ? 'Active' : 'Not Active'),
+    },
   ];
 
   return (
     <div className="ag-theme-quartz h-[calc(100vh-140px)]">
       {!companies?.length && <Loading />}
+      <div className="h-[50px] flex items-center justify-end px-[20px]">
+        <Button className="flex items-center gap-[5px] bg-teal-500 hover:bg-teal-600 shadow-neutral-400">
+          <IoMdDownload className="h-[20px] w-[20px]" /> Download
+        </Button>
+      </div>
       <AgGridReact
         rowData={companies || []}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         pagination={true}
+        suppressCellFocus={true}
       />
     </div>
   );

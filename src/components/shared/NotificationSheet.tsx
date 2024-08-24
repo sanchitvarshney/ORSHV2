@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -16,9 +16,19 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '../ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AppDispatch, RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNotifications } from '@/features/homePage/homePageSlice';
 
 const NotificationSheet: React.FC<Props> = ({ uiState }) => {
   const { notification, setNotification } = uiState;
+  const dispatch = useDispatch<AppDispatch>();
+  const { notifications } = useSelector((state: RootState) => state.homePage);
+
+  useEffect(() => {
+    dispatch(fetchNotifications());
+  }, [dispatch]);
+
   return (
     <Sidebar open={notification} onOpenChange={setNotification}>
       <SidebarContent
@@ -53,129 +63,53 @@ const NotificationSheet: React.FC<Props> = ({ uiState }) => {
           </Button>
         </div>
         <div className="h-[calc(100vh-170px)] overflow-y-auto flex flex-col gap-[10px] px-[10px] py-[20px]">
-          <Card className="p-0 rounded-md">
-            <CardHeader className="p-[10px] flex justify-between flex-row">
-              <div>
-                <CardTitle className="text-slate-600">
-                  Website design meating
-                </CardTitle>
-                <CardDescription>Lorem ipsum dolor sit amet.</CardDescription>
-              </div>
-              <div>
-                <Badge className="h-[12px] w-[12px] rounded-full bg-blue-300 p-0 hover:bg-blue-300" />
-              </div>
-            </CardHeader>
-            <CardContent className="p-[10px] m-0">
-              <div className="flex items-center justify-between mb-[10px]">
-                <div className="flex gap-[5px] text-slate-600 font-[500]">
-                  <Avatar className="h-[30px] w-[30px]">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  Sachin Maurya
-                </div>
-                <div>
-                  <p className="text-[14px] text-slate-600">6 hours ago</p>
-                </div>
-              </div>
-              <div className="w-full bg-blue-100 rounded-md p-[5px] text-slate-600">
-                <p className="text-[14px]">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Ullam laboriosam asperiores nulla distinctio saepe nostrum aut
-                  explicabo, minus sint perferendis!
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="p-0 rounded-md">
-            <CardHeader className="p-[10px] flex justify-between flex-row">
-              <div>
-                <CardTitle className="text-slate-600">
-                  Website design meeting
-                </CardTitle>
-                <CardDescription>Lorem ipsum dolor sit amet.</CardDescription>
-              </div>
-              <div>
-                <Badge className="h-[12px] w-[12px] rounded-full bg-transparent border-2 border-blue-300 p-0 hover:bg-transparent " />
-              </div>
-            </CardHeader>
-            <CardContent className="p-[10px] m-0">
-              <div className="flex items-center justify-between mb-[10px]">
-                <div className="flex gap-[5px] text-slate-600 font-[500]">
-                  <Avatar className="h-[30px] w-[30px]">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  Shiv Sir
-                </div>
-                <div>
-                  <p className="text-[14px] text-slate-600">2 days ago</p>
-                </div>
-              </div>
-              <div className="w-full bg-blue-100 rounded-md p-[5px] text-slate-600">
-                <p className="text-[14px]">
-                  <strong>Attachment</strong>{' '}
-                  <a href="#" className="underline">
-                    Screenshot398412343--312343-e23e-32e32-e
-                  </a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="p-0 rounded-md">
-            <CardHeader className="p-[10px] flex justify-between flex-row gap-[20px]">
-              <div>
-                <CardTitle className="text-slate-600">
-                  Salary component compleate successfully
-                </CardTitle>
-                <CardDescription>Lorem ipsum dolor sit amet.</CardDescription>
-              </div>
-              <div>
-                <Badge className="h-[12px] w-[12px] rounded-full bg-transparent border-2 border-blue-300 p-0 hover:bg-transparent " />
-              </div>
-            </CardHeader>
-            <CardContent className="p-[10px] m-0">
-              <div className="flex items-center justify-between mb-[10px]">
-                <div className="flex gap-[5px] text-slate-600 font-[500]">
-                  <Avatar className="h-[30px] w-[30px]">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  Lovish Tuteja
-                </div>
-                <div>
-                  <p className="text-[14px] text-slate-600">7 hours ago</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="p-0 rounded-md">
-            <CardHeader className="p-[10px] flex justify-between flex-row gap-[20px]">
-              <div>
-                <CardTitle className="text-slate-600">
-                  Salary component compleate successfully
-                </CardTitle>
-                <CardDescription>Lorem ipsum dolor sit amet.</CardDescription>
-              </div>
-              <div>
-                <Badge className="h-[12px] w-[12px] rounded-full bg-transparent border-2 border-blue-300 p-0 hover:bg-transparent " />
-              </div>
-            </CardHeader>
-            <CardContent className="p-[10px] m-0">
-              <div className="flex items-center justify-between mb-[10px]">
-                <div className="flex gap-[5px] text-slate-600 font-[500]">
-                  <Avatar className="h-[30px] w-[30px]">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  Lovish Tuteja
-                </div>
-                <div>
-                  <p className="text-[14px] text-slate-600">7 hours ago</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {notifications.length > 0 ? (
+            notifications?.map((notification: any, index: any) => (
+              <Card key={index} className="p-0 rounded-md">
+                <CardHeader className="p-[10px] flex justify-between flex-row">
+                  <div>
+                    <CardTitle className="text-slate-600">
+                      {notification.title}
+                    </CardTitle>
+                    <CardDescription>{notification.message}</CardDescription>
+                  </div>
+                  <div>
+                    <Badge
+                      className={`h-[12px] w-[12px] rounded-full ${
+                        notification.type === 'balance'
+                          ? 'bg-red-300'
+                          : 'bg-blue-300'
+                      } p-0`}
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="p-[10px] m-0">
+                  <div className="flex items-center justify-between mb-[10px]">
+                    <div className="flex gap-[5px] text-slate-600 font-[500]">
+                      <Avatar className="h-[30px] w-[30px]">
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      {/* Assuming you want to display the sender's name or similar info */}
+                      Sender Name
+                    </div>
+                    <div>
+                      <p className="text-[14px] text-slate-600">
+                        {notification.notiInsertedAt}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-full bg-blue-100 rounded-md p-[5px] text-slate-600">
+                    <p className="text-[14px]">{notification.message}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p className="text-center text-slate-600">
+              No notifications available
+            </p>
+          )}
         </div>
         <div className="bg-white h-[50px] border-t shadow border-neutral-200  w-full flex justify-center items-center">
           <Button

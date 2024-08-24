@@ -288,7 +288,7 @@ const EmployeeData: React.FC = () => {
           }`}
         >
           <AgGridReact
-            suppressCellFocus={false}
+            suppressCellFocus={true}
             defaultColDef={defaultColDef}
             columnDefs={columnDefs}
             rowData={filterData?.result || []}

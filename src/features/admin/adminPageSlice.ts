@@ -582,6 +582,7 @@ export const getCompanyBranchOptions = createAsyncThunk<
           description: response.data.message,
         });
       }
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to fetch workers');
@@ -779,6 +780,11 @@ const adminPageSlice = createSlice({
         state.loading = 'succeeded';
         state.branches = action.payload.data;
         state.error = null;
+      })
+      .addCase(getCompanyBranchOptions.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+        state.branches = [];
       })
       .addCase(getCompanyInfo.fulfilled, (state, action) => {
         state.loading = 'succeeded';

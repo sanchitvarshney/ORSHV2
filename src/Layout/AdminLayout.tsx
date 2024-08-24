@@ -10,7 +10,7 @@ interface Props {
 }
 const AdminLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="h-[calc(100vh-70px)] w-[calc(100vw-20px)] grid grid-cols-[300px_1fr]">
+    <div className="h-[calc(100vh-70px)] w-[calc(100vw-34px)] grid grid-cols-[300px_1fr]">
       <div className="w-full border p-[10px] ">
         <nav className="w-full flex flex-col gap-[5px]">
           <NavLink

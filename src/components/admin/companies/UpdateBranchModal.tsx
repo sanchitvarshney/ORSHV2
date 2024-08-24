@@ -227,6 +227,7 @@ const UpdateBranchModal = (props: any) => {
               <Button
                 onClick={handleUpdateCompany}
                 icon={<Check size={18} />}
+                className='bg-teal-500 hover:bg-teal-600'
                 disabled={!branchName || !email}
               >
                 Add

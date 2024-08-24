@@ -111,7 +111,8 @@ const UpdateCompany = (props: any) => {
                 onClick={handleUpdateCompany}
                 icon={<Check size={18} />}
                 disabled={!companyName || !email}
-              >
+                className='bg-teal-500 hover:bg-teal-600'
+                >
                 Update
               </Button>
             </div>
