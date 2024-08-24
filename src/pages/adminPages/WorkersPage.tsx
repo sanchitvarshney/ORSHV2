@@ -6,24 +6,9 @@ import { tabTriggerStyle } from '@/style/CustomStyles';
 import { FaFileExcel } from 'react-icons/fa6';
 import ListWorker from '@/components/shared/ListWorker';
 import { FileUploadDialog } from '@/components/shared/FileUploadDialog';
-import AddPOPopovers from '@/components/excelUpload/AddPOPOvers';
 
 const WorkersPage: React.FC = () => {
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [rowData, setRowData] = useState<[]>([]);
-  const [excelModel, setExcelModel] = useState<boolean>(false);
-  const [backModel, setBackModel] = useState<boolean>(false);
-  const [resetModel, setResetModel] = useState<boolean>(false);
-
-  const uiState = {
-    excelModel,
-    setExcelModel,
-    setRowData,
-    backModel,
-    setBackModel,
-    resetModel,
-    setResetModel,
-  };
 
   return (
     <Tabs defaultValue="add-worker">
@@ -45,8 +30,7 @@ const WorkersPage: React.FC = () => {
         </Button>
       </div>
       {isDialogOpen && (
-      // <AddPOPopovers uiState={uiState} />
-      <FileUploadDialog onClose={() => setDialogOpen(false)} />
+        <FileUploadDialog onClose={() => setDialogOpen(false)} />
       )}
       <TabsContent value="add-worker" className="h-[calc(100vh-140px)] m-0">
         <AddWorker />

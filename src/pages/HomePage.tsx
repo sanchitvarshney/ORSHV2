@@ -117,7 +117,7 @@ const HomePage: React.FC = () => {
     handleChange(id, 'companies', selectedCompanies);
   };
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async () => {
     navigate('/employee-list');
     const payload: any = {
       company: companiesArray,
@@ -320,6 +320,7 @@ const HomePage: React.FC = () => {
                               maxCount={3}
                               className="w-auto bg-white shadow-none hover:bg-white min-w-[600px]"
                               disabled={row.filter === ''}
+                              value={["value"]}
                             />
                           </div>
                         </div>

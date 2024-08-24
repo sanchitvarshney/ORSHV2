@@ -26,7 +26,6 @@ import {
   Percent,
   Building,
   CalendarDays,
-  RefreshCcw,
 } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { AiOutlineUser } from 'react-icons/ai';
@@ -123,12 +122,13 @@ export default function EmpUpdate() {
     },
   ]);
 
-  const parseDate = (dateString: string | null): Date | null => {
+  const parseDate = (dateString: any): any => {
     return dateString ? new Date(dateString) : null;
   };
   const formatDate = (date: Date | null): string => {
     return date ? format(date, 'dd-MM-yyyy') : 'Pick a date';
   };
+  
 
   useEffect(() => {
     if (workerInfo) {
@@ -338,7 +338,10 @@ export default function EmpUpdate() {
   }, [isChecked, perPinCode, perHouseNo, perArea]);
   const isValidDate = (date: any): date is Date =>
     date instanceof Date && !isNaN(date.getTime());
+  
   const validDate = isValidDate(empDOB) ? empDOB : null;
+  
+
   const payload = {
     empId: workerInfo?.basicInfo?.uid,
     firstName: empFirstName,
@@ -1179,13 +1182,16 @@ export const SelectWithLabel = <T extends Record<string, any>>({
 
 interface DatePickerWithLabelProps {
   label: string;
-  date: Date | undefined | null;
+  date: Date | null | undefined;
   onDateChange: (date: Date | null | undefined) => void;
-  icon?: React.ElementType; // Optional icon component
-  className?: string; // Additional class names
+  icon?: React.ElementType;
+  className?: string;
 }
+
+// Type guard to check if the date is a valid Date object
 const isValidDate = (date: any): date is Date =>
   date instanceof Date && !isNaN(date.getTime());
+
 export const DatePickerWithLabel: React.FC<DatePickerWithLabelProps> = ({
   label,
   date,
@@ -1193,7 +1199,9 @@ export const DatePickerWithLabel: React.FC<DatePickerWithLabelProps> = ({
   icon: Icon = AiOutlineUser,
   className = '',
 }) => {
+  // Convert null to undefined for the Calendar component
   const validDate = isValidDate(date) ? date : undefined;
+  
   return (
     <div className={className}>
       <Label className="floating-label gap-[10px]">
@@ -1218,7 +1226,7 @@ export const DatePickerWithLabel: React.FC<DatePickerWithLabelProps> = ({
         <PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={date}
+            selected={validDate} // Pass the adjusted date value
             onSelect={onDateChange}
             initialFocus
           />

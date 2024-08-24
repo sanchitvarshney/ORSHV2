@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
@@ -12,7 +12,6 @@ import { IoMdDownload } from 'react-icons/io';
 const ListCompany: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { companies,loading } = useSelector((state: RootState) => state.adminPage);
-  const [companyId, setCompanyId] = useState<string | null>(null);
 
   const defaultColDef = useMemo(
     () => ({

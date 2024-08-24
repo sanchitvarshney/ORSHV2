@@ -64,7 +64,9 @@ const AddClient = (props: any) => {
   };
   return (
     <Dialog open={props.show} onOpenChange={props.hide}>
-      <DialogContent className={stage === 'details' && 'min-w-[800px]'}>
+      <DialogContent
+        className={stage === 'details' ? 'min-w-[800px]' : undefined}
+      >
         <DialogHeader>
           <DialogTitle>Add Client</DialogTitle>
           <DialogDescription>
@@ -165,7 +167,7 @@ const AddClient = (props: any) => {
                   <Button
                     onClick={handleCreateClient}
                     icon={<Check size={18} />}
-                    className='bg-teal-500 hover:bg-teal-600'
+                    className="bg-teal-500 hover:bg-teal-600"
                   >
                     Create Client
                   </Button>

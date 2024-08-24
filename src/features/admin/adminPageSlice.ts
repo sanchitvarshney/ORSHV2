@@ -207,7 +207,7 @@ interface AdminPageState {
   perPincode: PinCode[] | null;
   workerInfo: [] | null;
   subIndustry: SubIndustry[] | null;
-  companyInfo: [] | null;
+  companyInfo: BranchDetail[] | null;
   loading: boolean;
   error: string | null;
 }

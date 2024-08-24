@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { AlertDialogPopup } from '@/components/shared/AlertDialogPopup';
 import { toast } from '@/components/ui/use-toast';
 import Loading from '@/components/reusable/Loading';
+import { ColDef } from 'ag-grid-community';
 
 const ActivityLogPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -84,7 +85,7 @@ const ActivityLogPage: React.FC = () => {
   const indexCellRenderer = (params: any) => {
     return params.node.rowIndex + 1;
   };
-  const enhancedColumns = [
+  const enhancedColumns:ColDef[] = [
     {
       headerName: '#',
       field: 'index',

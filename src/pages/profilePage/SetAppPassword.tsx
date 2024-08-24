@@ -42,14 +42,12 @@ const SetPassword = () => {
     }, 500);
   };
 
-  const payload ={
+  const payload:any ={
     oldPassword:oldPassword,
     newPassword:newPassword,
     confirmPassword:confirmPassword
   }
-// const handleSubmit =()=>{
 
-// }
   return (
     <div className="pt-10 p-5">
       <div className="w-[70%] mx-auto p-6 border rounded-lg shadow-md float-left">

@@ -48,7 +48,7 @@ interface HomePageState {
   selectedCompany: Company | null;
   error: string | null;
   advancedFilter: AdvancedFilterPayload[] | null;
-  notifications: NotificationResponse[] | null;
+  notifications: Notification[] | null;
   loading: boolean;
 }
 
@@ -58,7 +58,7 @@ const initialState: HomePageState = {
   selectedCompany: null,
   error: null,
   advancedFilter: [],
-  notifications: [],
+  notifications: null,
   loading: false,
 };
 
@@ -80,15 +80,14 @@ export const fetchNotifications = createAsyncThunk<NotificationResponse, void>(
   'homePage/fetchNotifications',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await orshAxios.get<NotificationResponse>(
-        '/fetch/notifications',
-      );
+      const response = await orshAxios.get<NotificationResponse>('/fetch/notifications');
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to fetch notifications');
     }
   },
 );
+
 
 export const fetchSearchCompanies = createAsyncThunk<SearchCompany[]>(
   'homePage/searchCompanies',

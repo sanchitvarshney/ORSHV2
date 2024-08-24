@@ -1,8 +1,5 @@
 import { orshAxios } from '@/axiosIntercepter';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const baseLink = 'https://esptest.mscorpres.net/';
 
 // Define types
 interface AuthState {

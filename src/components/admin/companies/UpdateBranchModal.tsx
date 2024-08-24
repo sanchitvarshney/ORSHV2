@@ -96,7 +96,7 @@ const UpdateBranchModal = (props: any) => {
     }
   };
 
-  const payload: {} = {
+  const payload: any = {
     addressID: props?.updatingBranch?.branchID,
     companyID: companyInfo[0]?.companyID,
     city: city,
