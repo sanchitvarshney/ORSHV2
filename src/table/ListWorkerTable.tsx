@@ -46,7 +46,7 @@ export const columnDefs: ColDef[] = [
     filter: true,
     flex: 1,
   },
-  { headerName: 'D.O.B', field: 'DOB', sortable: true, filter: true, flex: 1 },
+  { headerName: 'DOB', field: 'DOB', sortable: true, filter: true, flex: 1 },
 ];
 
 interface RowData {

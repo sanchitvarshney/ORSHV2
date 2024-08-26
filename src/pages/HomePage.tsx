@@ -320,7 +320,7 @@ const HomePage: React.FC = () => {
                               maxCount={3}
                               className="w-auto bg-white shadow-none hover:bg-white min-w-[600px]"
                               disabled={row.filter === ''}
-                              value={["value"]}
+                              value={['value']}
                             />
                           </div>
                         </div>

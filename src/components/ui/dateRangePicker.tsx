@@ -82,7 +82,7 @@ const PRESETS: Preset[] = [
 export const DateRangePicker: FC<DateRangePickerProps> & {
   filePath: string;
 } = ({
-  initialDateFrom = "",
+  initialDateFrom = '',
   initialDateTo,
   initialCompareFrom,
   initialCompareTo,
@@ -93,19 +93,20 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
 }): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [range, setRange] = useState<DateRange>({
-    from: getDateAdjustedForTimezone(initialDateFrom),
-    to: initialDateTo
-      ? getDateAdjustedForTimezone(initialDateTo)
-      : getDateAdjustedForTimezone(initialDateFrom),
+  const [range, setRange] = useState<any>({
+    from: initialDateFrom
+      ? getDateAdjustedForTimezone(initialDateFrom)
+      : undefined,
+    to: initialDateTo ? getDateAdjustedForTimezone(initialDateTo) : undefined,
   });
+
   const [rangeCompare, setRangeCompare] = useState<DateRange | undefined>(
     initialCompareFrom
       ? {
-          from: new Date(new Date(initialCompareFrom).setHours(0, 0, 0, 0)),
+          from: getDateAdjustedForTimezone(initialCompareFrom),
           to: initialCompareTo
-            ? new Date(new Date(initialCompareTo).setHours(0, 0, 0, 0))
-            : new Date(new Date(initialCompareFrom).setHours(0, 0, 0, 0)),
+            ? getDateAdjustedForTimezone(initialCompareTo)
+            : undefined,
         }
       : undefined,
   );
@@ -214,32 +215,18 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
 
   const resetValues = (): void => {
     setRange({
-      from:
-        typeof initialDateFrom === 'string'
-          ? getDateAdjustedForTimezone(initialDateFrom)
-          : initialDateFrom,
-      to: initialDateTo
-        ? typeof initialDateTo === 'string'
-          ? getDateAdjustedForTimezone(initialDateTo)
-          : initialDateTo
-        : typeof initialDateFrom === 'string'
+      from: initialDateFrom
         ? getDateAdjustedForTimezone(initialDateFrom)
-        : initialDateFrom,
+        : undefined,
+      to: initialDateTo ? getDateAdjustedForTimezone(initialDateTo) : undefined,
     });
     setRangeCompare(
       initialCompareFrom
         ? {
-            from:
-              typeof initialCompareFrom === 'string'
-                ? getDateAdjustedForTimezone(initialCompareFrom)
-                : initialCompareFrom,
+            from: getDateAdjustedForTimezone(initialCompareFrom),
             to: initialCompareTo
-              ? typeof initialCompareTo === 'string'
-                ? getDateAdjustedForTimezone(initialCompareTo)
-                : initialCompareTo
-              : typeof initialCompareFrom === 'string'
-              ? getDateAdjustedForTimezone(initialCompareFrom)
-              : initialCompareFrom,
+              ? getDateAdjustedForTimezone(initialCompareTo)
+              : undefined,
           }
         : undefined,
     );
@@ -305,15 +292,21 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
         <Button size={'lg'} variant="outline">
           <div className="text-right">
             <div className="py-1">
-              <div>{`${formatDate(range.from, locale)}${
-                range.to != null ? ' - ' + formatDate(range.to, locale) : ''
-              }`}</div>
+              <div>
+                {range.from
+                  ? formatDate(range.from, locale)
+                  : 'Please select the Date'}
+                {range.to ? ` - ${formatDate(range.to, locale)}` : ''}
+              </div>
             </div>
-            {rangeCompare != null && (
+            {rangeCompare && (
               <div className="-mt-1 text-xs opacity-60">
                 <>
-                  vs. {formatDate(rangeCompare.from, locale)}
-                  {rangeCompare.to != null
+                  vs.{' '}
+                  {rangeCompare.from
+                    ? formatDate(rangeCompare.from, locale)
+                    : 'No start date selected'}
+                  {rangeCompare.to
                     ? ` - ${formatDate(rangeCompare.to, locale)}`
                     : ''}
                 </>
@@ -376,27 +369,43 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
                     <DateInput
-                      value={range.from}
-                      onChange={(date: any) => {
-                        const toDate =
-                          range.to == null || date > range.to ? date : range.to;
-                        setRange((prevRange) => ({
-                          ...prevRange,
-                          from: date,
-                          to: toDate,
-                        }));
+                      value={range.from || ''}
+                      onChange={(date: Date | undefined) => {
+                        if (date) {
+                          const toDate =
+                            range.to == null || date > range.to
+                              ? date
+                              : range.to;
+                          setRange((prevRange: any) => ({
+                            ...prevRange,
+                            from: date,
+                            to: toDate,
+                          }));
+                        } else {
+                          setRange((prevRange: any) => ({
+                            ...prevRange,
+                            from: undefined,
+                          }));
+                        }
                       }}
                     />
-                    <div className="py-1">-</div>
                     <DateInput
-                      value={range.to}
-                      onChange={(date: any) => {
-                        const fromDate = date < range.from ? date : range.from;
-                        setRange((prevRange) => ({
-                          ...prevRange,
-                          from: fromDate,
-                          to: date,
-                        }));
+                      value={range.to || ''}
+                      onChange={(date: Date | undefined) => {
+                        if (date) {
+                          const fromDate =
+                            date < range.from ? date : range.from;
+                          setRange((prevRange: any) => ({
+                            ...prevRange,
+                            from: fromDate,
+                            to: date,
+                          }));
+                        } else {
+                          setRange((prevRange: any) => ({
+                            ...prevRange,
+                            to: undefined,
+                          }));
+                        }
                       }}
                     />
                   </div>

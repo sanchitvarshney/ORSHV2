@@ -116,26 +116,20 @@ export function FileUploadDialog({ onClose }: FileUploadDialogProps) {
           </div>
           <div>
             <h2 className="text-[16px] text-slate-600 font-bold">
-              Instructions
+              Upload Instructions
             </h2>
             <ol className="text-slate-500 text-[14px] ml-[10px] list-decimal">
-              <li> Don't Edit columns colored as red.</li>
-              <li>Don't change order of columns.</li>
-              <li>Custom Fields columns with bold headers are mandatory.</li>
               <li>
-                In unit column, just enter unit name, and that should exactly
-                match with the product units. (eg. for Litre, 'litre' is
-                incorrect).
+                Please refer to the "References" sheet for the necessary code.
+              </li>
+              <li>Do not delete, remove, or edit row number [1].</li>
+              <li>
+                The colored cells in row 2 of the sheet named "Sample Data"
+                indicate the corresponding columns and rows in the "References"
+                sheet for "Value" and "Code."
               </li>
               <li>
-                In unit column, just enter unit name, and that should exactly
-                match with the product units. (eg. for Litre, 'litre' is
-                incorrect).
-              </li>
-              <li>
-                To apply absolute discount in document currency, keep 'Discount
-                Type' column blank, whereas to apply percentage discount enter
-                '%' in 'Discount Type' column.
+              Ensure the file being uploaded is in .csv format.
               </li>
             </ol>
             <div className="flex flex-row pt-24 gap-5">

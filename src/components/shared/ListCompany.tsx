@@ -45,7 +45,6 @@ const ListCompany: React.FC = () => {
       field: 'name',
       cellRenderer: actionCellRenderer,
     },
-    { headerName: 'Company ID', field: 'companyID' },
     { headerName: 'PAN No', field: 'panNo' },
     { headerName: 'Email', field: 'email' },
     { headerName: 'Mobile', field: 'mobile' },

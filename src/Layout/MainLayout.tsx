@@ -1,4 +1,4 @@
-import { BellRing, Home, Mail } from 'lucide-react';
+import { BellRing, Home, Mail, User } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import {
@@ -116,6 +116,22 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 >
                   <MdOutlineAdminPanelSettings className="w-6 h-6" />
                   Admin
+                </NavLink>
+                <NavLink
+                  to="/profile"
+                  className={NavlinkStyle}
+                  onClick={() => setOpen(false)}
+                >
+                  <User className="w-6 h-6" />
+                  Profile
+                </NavLink>
+                <NavLink
+                  to="/company/list"
+                  className={NavlinkStyle}
+                  onClick={() => setOpen(false)}
+                >
+                  <MdOutlineAdminPanelSettings className="w-6 h-6" />
+                  Setting
                 </NavLink>
               </nav>
             </aside>

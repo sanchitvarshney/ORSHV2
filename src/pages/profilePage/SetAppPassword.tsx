@@ -15,6 +15,10 @@ const SetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState({
+    score: 0,
+    label: '',
+  });
 
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -31,9 +35,8 @@ const SetPassword = () => {
       setError('New password and confirm password do not match.');
       return;
     }
-    dispatch(changePassword(payload))
+    dispatch(changePassword(payload));
 
-    // Simulate API call
     setTimeout(() => {
       console.log('Old Password:', oldPassword);
       console.log('New Password:', newPassword);
@@ -42,11 +45,46 @@ const SetPassword = () => {
     }, 500);
   };
 
-  const payload:any ={
-    oldPassword:oldPassword,
-    newPassword:newPassword,
-    confirmPassword:confirmPassword
-  }
+  const payload: any = {
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+    confirmPassword: confirmPassword,
+  };
+
+  const checkPasswordStrength = (password: string) => {
+    let score = 0;
+    let label = '';
+
+    if (password.length >= 6) score += 1;
+    if (password.length >= 8) score += 1;
+    if (password.match(/[A-Z]/)) score += 1;
+    if (password.match(/[0-9]/)) score += 1;
+    if (password.match(/[^a-zA-Z0-9]/)) score += 1;
+
+    switch (score) {
+      case 1:
+      case 2:
+        label = 'Weak';
+        break;
+      case 3:
+        label = 'Medium';
+        break;
+      case 4:
+      case 5:
+        label = 'Strong';
+        break;
+      default:
+        label = '';
+    }
+
+    setPasswordStrength({ score, label });
+  };
+  const isFormValid =
+    oldPassword &&
+    newPassword &&
+    confirmPassword &&
+    newPassword === confirmPassword &&
+    passwordStrength.score >= 3;
 
   return (
     <div className="pt-10 p-5">
@@ -55,9 +93,8 @@ const SetPassword = () => {
         <div>
           <p>
             This App password will be required if you want to send contact
-            E-mails to the workers from your recruitment E-mail ID
+            E-mails to the workers from your recruitment E-mail ID.
           </p>
-
           <p className="mt-2">
             If the App password and recruitment E-mail is not set then the
             contact mails will be sent from our E-mail ID.
@@ -98,7 +135,10 @@ const SetPassword = () => {
               type={showNewPassword ? 'text' : 'password'}
               className={inputStyle}
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(e) => {
+                setNewPassword(e.target.value);
+                checkPasswordStrength(e.target.value);
+              }}
             />
             <Label className="floating-label gap-[10px]">
               <span className="flex items-center gap-[10px] font-bold">
@@ -138,13 +178,37 @@ const SetPassword = () => {
               {showConfirmPassword ? <IoEyeOff /> : <IoEye />}
             </button>
           </div>
-
-          <button
-            type="submit"
-            className="py-2 bg-teal-500 hover:bg-teal-600 text-white rounded w-[20%] float-right"
-          >
-            Set Password
-          </button>
+          <div>
+            <div className="mt-4">
+              <p className="font-semibold">Password Strength :</p>
+              <div className="relative  bg-gray-200 rounded h-2 mt-1">
+                <div
+                  className={`h-2 rounded transition-all duration-300 ${
+                    passwordStrength.score === 1
+                      ? 'bg-red-500 w-1/4'
+                      : passwordStrength.score === 2
+                      ? 'bg-yellow-500 w-2/4'
+                      : passwordStrength.score === 3
+                      ? 'bg-blue-500 w-3/4'
+                      : passwordStrength.score === 4 ||
+                        passwordStrength.score === 5
+                      ? 'bg-green-500 w-full'
+                      : 'w-0'
+                  }`}
+                ></div>
+              </div>
+              <span className="text-sm text-teal-600 mt-2 block">
+                {passwordStrength.label}
+              </span>
+            </div>
+            <button
+              type="submit"
+              className="py-2 bg-teal-500 hover:bg-teal-600 text-white rounded w-[20%] float-right"
+              disabled={!isFormValid}
+            >
+              Set Password
+            </button>
+          </div>
         </form>
       </div>
     </div>
