@@ -26,7 +26,6 @@ function Profile() {
   const [recruitmentEmail, setRecruitmentEmail] = useState<string>('');
   const [showOtpModal, setShowOtpModal] = useState(false);
   const [fieldToVerify, setFieldToVerify] = useState('');
-  const [valueToVerify, setValueToVerify] = useState('');
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -44,12 +43,11 @@ function Profile() {
   const updateUserData = async (field: string, value: string, type: string) => {
     if (
       field === 'mobile' ||
-      field === 'email' ||
+      field === 'adminEmail' ||
       field === 'supportEmail' ||
       field === 'recruitmentEmail'
     ) {
       setFieldToVerify(type);
-      setValueToVerify(value);
       dispatch(
         sentOtp({ body: { [field]: value }, type: `${type}=true` }),
       ).then((response: any) => {
@@ -64,7 +62,6 @@ function Profile() {
 
   const handleVerifyClick = (field: string, value: string, type: string) => {
     setFieldToVerify(type);
-    setValueToVerify(value);
     dispatch(sentOtp({ body: { [field]: value }, type: `${type}=true` })).then(
       (response: any) => {
         if (response.payload.code === 'NOTOK') {
@@ -75,7 +72,7 @@ function Profile() {
   };
 
   return (
-    <div style={{ backgroundColor: '#f5f5f5' }} className='h-full'>
+    <div style={{ backgroundColor: '#f5f5f5' }} className="h-full">
       {loading && <Loading />}
       {userProfile && (
         <div className="flex flex-col items-center ">
@@ -173,8 +170,7 @@ function Profile() {
           setShowOtpModal(false);
           dispatch(
             verifyOtp({
-              body: { otp, email: valueToVerify },
-              type: `${fieldToVerify}=true`,
+              body: { otp, emailType: fieldToVerify },
             }),
           );
         }}

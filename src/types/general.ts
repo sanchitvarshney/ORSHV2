@@ -22,3 +22,22 @@ export interface ResponseType {
   message: string | null;
   success: true;
 }
+
+export const marriedStatus = [
+  {
+    text: 'Married',
+    value: 'M',
+  },
+  {
+    text: 'Unmarried',
+    value: 'U',
+  },
+  {
+    text: 'Widowed',
+    value: 'W',
+  },
+  {
+    text: 'Divorced',
+    value: 'D',
+  },
+];

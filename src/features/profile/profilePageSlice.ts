@@ -78,12 +78,9 @@ export const sentOtp = createAsyncThunk(
 
 export const verifyOtp = createAsyncThunk(
   'adminPage/sentOtp',
-  async (
-    { body, type }: { body: object; type: string },
-    { rejectWithValue },
-  ) => {
+  async ({ body }: { body: object }, { rejectWithValue }) => {
     try {
-      const response = await orshAxios.post(`/admin/verifyOtp?${type}`, body);
+      const response = await orshAxios.post(`/admin/verifyOtp`, body);
       if (!response.data.success) {
         toast({
           variant: 'destructive',

@@ -60,6 +60,7 @@ import {
   EducationDetail,
   EmploymentDetail,
 } from '@/features/admin/adminPageTypes';
+import { marriedStatus } from '@/types/general';
 
 export default function EmpUpdate() {
   const params = useParams();
@@ -67,7 +68,6 @@ export default function EmpUpdate() {
   const {
     department: departmentList,
     designation: designationList,
-    marriedStatus,
     branches,
     universityList,
     streams,
