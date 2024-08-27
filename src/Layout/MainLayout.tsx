@@ -23,7 +23,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DownloadIndecator from '@/components/shared/DownloadIndicater';
-import { Badge } from '@/components/ui/badge';
 import {
   Sidebar,
   SidebarContent,
@@ -39,7 +38,9 @@ import { logout } from '@/features/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { Company, fetchCompanies } from '@/features/homePage/homePageSlice';
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline } from 'react-icons/io5';
+import { FiLogOut } from 'react-icons/fi';
+import { AlertDialogPopup } from '@/components/shared/AlertDialogPopup';
 
 interface Props {
   children: React.ReactNode;
@@ -51,6 +52,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = useState<boolean>(false);
   const [notification, setNotification] = useState<boolean>(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const { companies } = useSelector((state: RootState) => state.homePage);
   const [selectedCompany, setSelectedCompany] = useState<string>('');
 
@@ -64,7 +66,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (companies?.length > 0) {
       // Set default company or fetch from local storage if needed
-      const defaultCompany = localStorage.getItem('companySelect') || companies[0].value;
+      const defaultCompany =
+        localStorage.getItem('companySelect') || companies[0].value;
       setSelectedCompany(defaultCompany);
     }
   }, [companies]);
@@ -82,6 +85,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <>
+      <AlertDialogPopup
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onConfirm={handleLogout}
+        title="Log Out"
+        description="Are you sure you want to Logout."
+      />
       <NotificationSheet uiState={{ notification, setNotification }} />
       <div className="flex flex-col min-h-screen bg-muted/40">
         <Sidebar open={open} onOpenChange={setOpen}>
@@ -164,7 +174,9 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 >
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuLabel onClick={()=> navigate("/profile")}>Profile</DropdownMenuLabel>
+                  <DropdownMenuLabel onClick={() => navigate('/profile')}>
+                    Profile
+                  </DropdownMenuLabel>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
                   <DropdownMenuItem>Support</DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -191,7 +203,10 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             </div>
             <div className="flex items-center gap-[20px]">
               <div>
-                <Select value={selectedCompany} onValueChange={setSelectedCompany}>
+                <Select
+                  value={selectedCompany}
+                  onValueChange={setSelectedCompany}
+                >
                   <SelectTrigger className="w-[200px]">
                     <SelectValue placeholder="Choose Company" />
                   </SelectTrigger>
@@ -215,39 +230,19 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                   onClick={() => setNotification(true)}
                 >
                   <BellRing className="h-[25px] w-[25px] text-slate-600" />
-                  <Badge className="bg-teal-600 hover:bg-teal-600 h-[15px] w-[15px] rounded-full p-0 flex justify-center items-center absolute top-[-1px] right-[2px]">
+                  {/* <Badge className="bg-teal-600 hover:bg-teal-600 h-[15px] w-[15px] rounded-full p-0 flex justify-center items-center absolute top-[-1px] right-[2px]">
                     0
-                  </Badge>
+                  </Badge> */}
                 </div>
               </CustomTooltip>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="overflow-hidden rounded-full"
-                  >
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>CN</AvatarFallback>
-                    </Avatar>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  align="end"
-                  className="shadow-sm shadow-stone-500"
+              <CustomTooltip message="Notification" side="bottom">
+                <div
+                  className="relative flex items-center justify-center bg-indigo-50 cursor-pointer notification max-w-max p-[5px] rounded-md"
+                  onClick={() => setIsDialogOpen(true)}
                 >
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuLabel onClick={()=> navigate("/profile")}>Profile</DropdownMenuLabel>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                  <FiLogOut className="h-[25px] w-[25px] text-slate-600" />
+                </div>
+              </CustomTooltip>
             </div>
           </header>
         </div>

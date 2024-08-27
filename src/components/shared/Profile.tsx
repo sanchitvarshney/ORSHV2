@@ -112,7 +112,7 @@ function Profile() {
                       updateUserData('mobile', newValue, 'mobile');
                     }}
                     onVerify={() =>
-                      handleVerifyClick('phoneNumber', mobile, 'mobile')
+                      handleVerifyClick('mobile', mobile, 'mobile')
                     }
                   />
                   <SingleItem
@@ -138,11 +138,7 @@ function Profile() {
                       updateUserData('email', newValue, 'supportEmail');
                     }}
                     onVerify={() =>
-                      handleVerifyClick(
-                        'emailSupport',
-                        supportEmail,
-                        'supportEmail',
-                      )
+                      handleVerifyClick('email', supportEmail, 'supportEmail')
                     }
                   />
                   <SingleItem
@@ -157,7 +153,7 @@ function Profile() {
                     }}
                     onVerify={() =>
                       handleVerifyClick(
-                        'emailRecruitment',
+                        'email',
                         recruitmentEmail,
                         'recruitmentEmail',
                       )

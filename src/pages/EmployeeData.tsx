@@ -22,7 +22,7 @@ import { advancedFilter } from '@/features/homePage/homePageSlice';
 
 const EmployeeData: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { advancedFilter: filterData,loading } = useSelector(
+  const { advancedFilter: filterData, loading } = useSelector(
     (state: RootState) => state.homePage,
   );
 
@@ -57,6 +57,7 @@ const EmployeeData: React.FC = () => {
       setSelectedStates(filterData?.state?.map((state: any) => state.value));
     }
   }, [filterData]);
+
   const defaultColDef = useMemo(
     () => ({
       filter: 'agTextColumnFilter',

@@ -25,6 +25,9 @@ export function AlertDialogPopup({
   title,
   description,
 }: AlertDialogPopupProps) {
+
+  const mainTitle = title === 'Log Out' ? 'Log out' : 'Delete';
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
       <AlertDialogTrigger asChild></AlertDialogTrigger>
@@ -38,7 +41,7 @@ export function AlertDialogPopup({
             onClick={onConfirm}
             className="bg-red-600 hover:bg-red-600 shadow-neutral-400"
           >
-            Delete
+            {mainTitle}
           </AlertDialogAction>
           <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
         </AlertDialogFooter>
