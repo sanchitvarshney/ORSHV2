@@ -139,7 +139,7 @@ export function FileUploadDialog({ onClose }: FileUploadDialogProps) {
                 Ensure the file being uploaded is in .csv format.
               </li>
               <li className="p-1">
-                Download
+                Download<span> </span>
                 <a
                   href="https://esptest.mscorpres.net/UPLOADS/employeeSample/ESPSample.xlsx"
                   target="_blank"
