@@ -196,7 +196,7 @@ export const fetchSearchCompanies = createAsyncThunk<SearchCompany[]>(
   },
 );
 
-export const topSearchCompanies = createAsyncThunk<SearchCompany[]>(
+export const fetchTopSearchCompanies = createAsyncThunk<SearchCompany[]>(
   'homePage/topSearchCompanies',
   async (_, { rejectWithValue }) => {
     try {
@@ -330,16 +330,16 @@ const homePageSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      .addCase(topSearchCompanies.pending, (state) => {
+      .addCase(fetchTopSearchCompanies.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(topSearchCompanies.fulfilled, (state, action) => {
+      .addCase(fetchTopSearchCompanies.fulfilled, (state, action) => {
         state.loading = false;
         state.topSearchCompanies = action.payload;
         state.error = null;
       })
-      .addCase(topSearchCompanies.rejected, (state, action) => {
+      .addCase(fetchTopSearchCompanies.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

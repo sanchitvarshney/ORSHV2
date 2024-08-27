@@ -35,12 +35,12 @@ import {
   advancedFilter,
   fetchCompanies,
   fetchSearchCompanies,
+  fetchTopSearchCompanies,
   genderSearch,
   presentDistrict,
   presentIndustry,
   presentState,
   SearchCompany,
-  topSearchCompanies,
 } from '@/features/homePage/homePageSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
     districtSearch,
     stateSearch,
     industrySearch,
-    topSerchCompanies,
+    topSearchCompanies,
   } = useSelector((state: RootState) => state.homePage);
 
   const [company, setCompany] = useState<Company[]>([]);
@@ -196,7 +196,7 @@ const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(topSearchCompanies());
+    dispatch(fetchTopSearchCompanies());
   }, [dispatch]);
 
   const handleSubmitClick = async () => {
@@ -261,7 +261,7 @@ const HomePage: React.FC = () => {
                           <FormItem className="flex flex-col items-center">
                             <FormControl>
                               <MultipleSelect
-                                options={topSerchCompanies?.map(
+                                options={topSearchCompanies?.map(
                                   (company: SearchCompany) => ({
                                     value: company.companyID,
                                     label: company.name,
@@ -280,7 +280,7 @@ const HomePage: React.FC = () => {
                             </FormControl>
                             <FormMessage />
                             <div className="flex items-center justify-center gap-[10px] flex-wrap flex-row pt-[20px] max-w-[550px]">
-                              {topSerchCompanies
+                              {topSearchCompanies
                                 ?.filter(
                                   (item: SearchCompany) =>
                                     !field.value.includes(item.companyID),
