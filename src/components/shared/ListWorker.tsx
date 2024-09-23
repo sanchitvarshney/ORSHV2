@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { columnDefs } from '@/table/ListWorkerTable';
-import { DateRangePicker } from '../ui/dateRangePicker';
+import { DatePicker, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { fetchWorkers } from '@/features/admin/adminPageSlice';
 import { format } from 'date-fns';
 import WorkerDetails from '@/components/shared/WorkerDetails';
 import Loading from '@/components/reusable/Loading';
+const { RangePicker } = DatePicker;
 
 const ListWorker: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,22 +17,11 @@ const ListWorker: React.FC = () => {
   );
   const [selectedEmpId, setSelectedEmpId] = useState<string | null>(null);
 
-  const handleDateRangeUpdate = (values: {
-    range: { from: Date; to?: Date };
-    rangeCompare?: { from: Date; to?: Date };
-  }) => {
-    const { range } = values;
-    if (
-      range &&
-      range.from instanceof Date &&
-      !isNaN(range.from.getTime()) &&
-      (range.to === undefined ||
-        (range.to instanceof Date && !isNaN(range.to.getTime())))
-    ) {
-      const startDate = new Date(range.from);
-      const endDate = range.to ? new Date(range.to) : new Date(range.from);
-      const formattedStartDate = format(startDate, 'dd-MM-yyyy');
-      const formattedEndDate = format(endDate, 'dd-MM-yyyy');
+  const handleDateRangeUpdate = (dates: any) => {
+    if (dates && dates.length === 2) {
+      const [startDate, endDate] = dates;
+      const formattedStartDate = format(startDate.toDate(), 'dd-MM-yyyy');
+      const formattedEndDate = format(endDate.toDate(), 'dd-MM-yyyy');
       dispatch(
         fetchWorkers({
           startDate: formattedStartDate,
@@ -56,15 +46,16 @@ const ListWorker: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] ">
+    <div className="flex flex-col h-[calc(100vh-140px)]">
       {loading && <Loading />}
       <div className="mb-4 pl-5 pt-5">
-        <DateRangePicker
-          align="center"
-          locale="en-US"
-          onUpdate={handleDateRangeUpdate}
-          showCompare={false}
-        />
+        <Space direction="vertical" size={12}>
+          <RangePicker
+            onChange={handleDateRangeUpdate}
+            format="DD-MM-YYYY"
+            className="w-full"
+          />
+        </Space>
       </div>
       <div className="flex flex-1">
         <div className="flex-1 mr-4">
@@ -93,4 +84,5 @@ const ListWorker: React.FC = () => {
     </div>
   );
 };
+
 export default ListWorker;
