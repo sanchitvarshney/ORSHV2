@@ -23,6 +23,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
+import { Skeleton } from 'antd';
 
 interface WorkerDetailsProps {
   empId: string;
@@ -31,6 +32,7 @@ interface WorkerDetailsProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  loading?: boolean;
 }
 
 const WorkerDetails: React.FC<WorkerDetailsProps> = ({
@@ -38,6 +40,7 @@ const WorkerDetails: React.FC<WorkerDetailsProps> = ({
   showEdit,
   open,
   onOpenChange,
+  loading,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { workerInfo } = useSelector((state: RootState) => state.adminPage);
@@ -85,7 +88,7 @@ const WorkerDetails: React.FC<WorkerDetailsProps> = ({
         <SheetHeader className="flex flex-row items-center justify-between py-0 h-[50px] border-b">
           <div className="flex justify-between items-center w-full">
             <SheetTitle className="text-slate-600">Worker Details</SheetTitle>
-            <div className="flex items-center gap-2">
+            <div className="flex-grow flex justify-center items-center gap-4">
               {showEdit && (
                 <Link target="_blank" to={`/employee-update/:${empId}`}>
                   <IconButton
@@ -108,6 +111,7 @@ const WorkerDetails: React.FC<WorkerDetailsProps> = ({
               >
                 <Download className="h-[20px] w-[20px] text-slate-500" />
               </Button>
+
               {/* <IconButton
             onClick={() => setOpen && setOpen(false)}
             hoverBackground="hover:bg-transparent"
@@ -117,28 +121,41 @@ const WorkerDetails: React.FC<WorkerDetailsProps> = ({
             </div>
           </div>
         </SheetHeader>
-        {workerInfo && (
-          <div className=''>
-            {workerInfo.basicInfo && (
-              <BasicDetails details={workerInfo.basicInfo} />
-            )}
-            <div className="grid grid-cols-2 gap-2">
-              {workerInfo.basicInfo?.presentAddress && (
-                <CurrentAddress details={workerInfo.basicInfo.presentAddress} />
+        {loading ? (
+          <>
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+            <Skeleton className="h-40" />
+          </>
+        ) : (
+          workerInfo && (
+            <div className="">
+              {workerInfo.basicInfo && (
+                <BasicDetails details={workerInfo.basicInfo} />
               )}
-              {workerInfo.basicInfo?.permanentAddress && (
-                <PermanentAddress
-                  details={workerInfo.basicInfo.permanentAddress}
-                />
+              <div className="grid grid-cols-2 gap-2">
+                {workerInfo.basicInfo?.presentAddress && (
+                  <CurrentAddress
+                    details={workerInfo.basicInfo.presentAddress}
+                  />
+                )}
+                {workerInfo.basicInfo?.permanentAddress && (
+                  <PermanentAddress
+                    details={workerInfo.basicInfo.permanentAddress}
+                  />
+                )}
+              </div>
+              {workerInfo.companyInfo && (
+                <EmployementDetails details={workerInfo} />
+              )}
+              {workerInfo.bankDetails && (
+                <BankDetails details={workerInfo.bankDetails} />
               )}
             </div>
-            {workerInfo.companyInfo && (
-              <EmployementDetails details={workerInfo} />
-            )}
-            {workerInfo.bankDetails && (
-              <BankDetails details={workerInfo.bankDetails} />
-            )}
-          </div>
+          )
         )}
         <div className="flex justify-end p-2 bg-white">
           <Button

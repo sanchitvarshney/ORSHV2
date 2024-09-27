@@ -128,6 +128,7 @@ const ListWorker: React.FC = () => {
             onOpenChange={(open) =>
               setSelectedEmpId(open ? selectedEmpId : null)
             }
+            loading={loading}
           />
           // </div>
         )}
