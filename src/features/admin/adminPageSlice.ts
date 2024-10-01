@@ -203,6 +203,7 @@ interface AdminPageState {
   activityLogs: ActivityLog[] | null;
   branches: BranchDetail[] | null;
   workers: Worker[] | null;
+  workersStatusCount: [] | null;
   corPincode: PinCode[] | null;
   perPincode: PinCode[] | null;
   workerInfo: [] | null;
@@ -225,6 +226,7 @@ const initialState: AdminPageState = {
   clientList: [],
   activityLogs: [],
   workers: [],
+  workersStatusCount: [],
   branches: [],
   workerInfo: [],
   companyInfo: [],
@@ -514,10 +516,10 @@ export const fetchClientList = createAsyncThunk<ClientResponse, void>(
 
 export const fetchWorkers = createAsyncThunk<
   WorkersResponse,
-  { startDate: string; endDate: string, empStatus: string }
+  { startDate: string; endDate: string; empStatus: string }
 >(
   'adminPage/fetchWorkers',
-  async ({ startDate, endDate ,empStatus}, { rejectWithValue }) => {
+  async ({ startDate, endDate, empStatus }, { rejectWithValue }) => {
     try {
       const response = await orshAxios.get<WorkersResponse>(
         `/worker/list?data=${startDate}-${endDate}&wise=createdDate&empStatus=${empStatus}`,
@@ -532,6 +534,17 @@ export const fetchWorkers = createAsyncThunk<
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to fetch workers');
+    }
+  },
+);
+export const fetchCountStatus = createAsyncThunk<any, void>(
+  'adminPage/fetchCountStatus',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await orshAxios.get<any>(`/worker/count`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue('Failed to fetch universities');
     }
   },
 );
@@ -854,6 +867,19 @@ const adminPageSlice = createSlice({
         state.workers = action.payload.data;
       })
       .addCase(fetchWorkers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchCountStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCountStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.workersStatusCount = action.payload.data;
+      })
+      .addCase(fetchCountStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
