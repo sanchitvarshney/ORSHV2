@@ -401,7 +401,11 @@ export default function EmpUpdate() {
       setEmpPhotoUrl(imageUrl); // Store the URL in state for immediate display
       console.log(empPhoto);
       dispatch(
-        uploadFamilyPhoto({ file: file, id: workerInfo?.basicInfo?.uid, type: 'emp' }),
+        uploadFamilyPhoto({
+          file: file,
+          id: workerInfo?.basicInfo?.uid,
+          type: 'emp',
+        }),
       );
     }
   };
@@ -413,7 +417,11 @@ export default function EmpUpdate() {
       setEmpFamilyPhotoUrl(imageUrl); // Store the URL in state for immediate display
       console.log(empFamilyPhoto);
       dispatch(
-        uploadFamilyPhoto({ file: file, id: workerInfo?.basicInfo?.uid, type: 'family' }),
+        uploadFamilyPhoto({
+          file: file,
+          id: workerInfo?.basicInfo?.uid,
+          type: 'family',
+        }),
       );
     }
   };
@@ -1113,7 +1121,7 @@ export default function EmpUpdate() {
                   {/* Optional overlay to indicate upload */}
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity">
                     <label
-                      htmlFor="profile-upload"
+                      htmlFor="profile-upload-input"
                       className="cursor-pointer text-white text-lg font-bold"
                     >
                       <span>Change</span>
@@ -1122,7 +1130,7 @@ export default function EmpUpdate() {
                 </div>
 
                 <input
-                  id="profile-upload"
+                  id="profile-upload-input"
                   type="file"
                   accept="image/*"
                   onChange={handlePhotoChange}
@@ -1132,17 +1140,18 @@ export default function EmpUpdate() {
                   Upload Profile Photo
                 </button>
               </div>
+
               <div className="w-1/3 bg-gray-50 p-[20px] rounded-xl shadow-lg flex flex-col items-center">
                 <div className="relative w-[150px] h-[150px] mb-4 overflow-hidden rounded-full bg-gray-200">
                   <img
                     src={empFamilyPhotoUrl || './ProfileImage.png'}
-                    alt="Profile"
+                    alt="Family"
                     className="w-full h-full object-cover"
                   />
                   {/* Optional overlay to indicate upload */}
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 hover:opacity-100 transition-opacity">
                     <label
-                      htmlFor="profile-upload"
+                      htmlFor="family-upload-input"
                       className="cursor-pointer text-white text-lg font-bold"
                     >
                       <span>Change</span>
@@ -1151,7 +1160,7 @@ export default function EmpUpdate() {
                 </div>
 
                 <input
-                  id="profile-upload"
+                  id="family-upload-input"
                   type="file"
                   accept="image/*"
                   onChange={handleFamilyPhotoChange}
