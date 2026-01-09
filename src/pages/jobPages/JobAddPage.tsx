@@ -53,6 +53,7 @@ interface Inputs {
   experience: string;
   jobStatus: string;
   jobDescription: string;
+  facilities: string;
 }
 
 const JobAddPage = () => {
@@ -78,6 +79,7 @@ const JobAddPage = () => {
       experience: '',
       jobStatus: '',
       jobDescription: '',
+      facilities: '',
     },
   });
 
@@ -113,6 +115,7 @@ const JobAddPage = () => {
       experience: data.experience,
       jobStatus: data.jobStatus,
       jobDescription: data.jobDescription,
+      facilities: data.facilities,
     };
     try {
       const response = await dispatch(createJob(payload)).unwrap();
@@ -335,7 +338,7 @@ const JobAddPage = () => {
                           placeholder="Enter Minimum Salary"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
+                            field.onChange(parseFloat(e.target.value) )
                           }
                         />
                       </FormControl>
@@ -359,7 +362,7 @@ const JobAddPage = () => {
                           placeholder="Enter Maximum Salary"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value) || 0)
+                            field.onChange(parseFloat(e.target.value))
                           }
                         />
                       </FormControl>
@@ -492,6 +495,25 @@ const JobAddPage = () => {
                       <Textarea
                         className={inputStyle}
                         placeholder="Enter job description and responsibilities"
+                        rows={4}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+                  <FormField
+                control={form.control}
+                name="facilities"
+                rules={{ required: 'Facilities is required' }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Facilities *</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className={inputStyle}
+                        placeholder="Enter job Facilities"
                         rows={4}
                         {...field}
                       />

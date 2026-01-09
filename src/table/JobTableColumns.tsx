@@ -9,10 +9,15 @@ const statusCellRenderer = (params: ICellRendererParams) => {
     'on-hold': { label: 'On Hold', color: 'text-blue-600' },
   };
 
-  const statusInfo = statusMap[status] || { label: status, color: 'text-gray-600' };
+  const statusInfo = statusMap[status] || {
+    label: status,
+    color: 'text-gray-600',
+  };
 
   return (
-    <span className={`font-medium ${statusInfo.color}`}>{statusInfo.label.toUpperCase()}</span>
+    <span className={`font-medium ${statusInfo.color}`}>
+      {statusInfo.label.toUpperCase()}
+    </span>
   );
 };
 
@@ -38,15 +43,14 @@ export const jobColumnDefs = (
     flex: 1,
     minWidth: 250,
     editable: false,
-
   },
   {
-    headerName: 'Branch',
+    headerName: 'Address',
     field: 'address',
     sortable: true,
     filter: true,
     flex: 1,
-    minWidth: 120,
+   minWidth: 250,
     editable: false,
   },
   {
@@ -156,6 +160,15 @@ export const jobColumnDefs = (
     },
   },
   {
+    headerName: 'Faculty',
+    field: 'facilities',
+    sortable: true,
+    filter: true,
+    flex: 1,
+    minWidth: 150,
+    editable: true,
+  },
+  {
     headerName: 'Created Date',
     field: 'insertDt',
     sortable: true,
@@ -216,4 +229,3 @@ export interface JobRowData {
   skills?: string;
   qualification?: string;
 }
-
