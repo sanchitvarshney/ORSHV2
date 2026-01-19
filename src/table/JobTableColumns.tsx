@@ -160,7 +160,7 @@ export const jobColumnDefs = (
     },
   },
   {
-    headerName: 'Faculty',
+    headerName: 'Facilities',
     field: 'facilities',
     sortable: true,
     filter: true,
@@ -228,4 +228,5 @@ export interface JobRowData {
   createdAt?: string;
   skills?: string;
   qualification?: string;
+  facilities?: string;
 }
