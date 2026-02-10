@@ -66,7 +66,6 @@ const JobAddPage = () => {
   const form = useForm<Inputs>({
     defaultValues: {
       company: '',
-      // branch: '',
       address: '',
       jobType: '',
       designation: '',
@@ -78,7 +77,6 @@ const JobAddPage = () => {
       qualification: '',
       experience: '',
       jobStatus: '',
-      jobDescription: '',
       facilities: '',
     },
   });
@@ -484,7 +482,7 @@ const JobAddPage = () => {
               />
 
               {/* Job Description */}
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="jobDescription"
                 rules={{ required: 'Job Description is required' }}
@@ -502,7 +500,7 @@ const JobAddPage = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
                   <FormField
                 control={form.control}
                 name="facilities"

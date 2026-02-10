@@ -16,11 +16,11 @@ import { fetchCompanies } from '@/features/homePage/homePageSlice';
 import { AlertDialogPopup } from '@/components/shared/AlertDialogPopup';
 import EditJobDialog from '@/components/shared/EditJobDialog';
 import { useForm } from 'react-hook-form';
-import { updatejobs } from '@/features/jobFeatures/jobsSlices';
+import { deleteJob, updatejobs } from '@/features/jobFeatures/jobsSlices';
 
 const JobListPage = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { department, designation,isFetchingJobsLoading } = useSelector(
+  const { department, designation, isFetchingJobsLoading } = useSelector(
     (state: RootState) => state.adminPage,
   );
   const { companies } = useSelector((state: RootState) => state.homePage);
@@ -29,7 +29,13 @@ const JobListPage = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<any | null>(null);
-  const [jobToDelete, setJobToDelete] = useState<string | null>(null);
+  const [jobToDelete, setJobToDelete] = useState<{
+    company: string;
+    uniqueID: string;
+  } | null>({
+    company: '',
+    uniqueID: '',
+  });
 
   const form = useForm<JobRowData>({
     defaultValues: {
@@ -51,24 +57,21 @@ const JobListPage = () => {
   });
 
   useEffect(() => {
-    if( department.length === 0 || designation.length === 0){
+    if (department.length === 0 || designation.length === 0) {
       dispatch(fetchDepartments());
-    dispatch(fetchDesignations());
-    dispatch(fetchCompanies());
+      dispatch(fetchDesignations());
+      dispatch(fetchCompanies());
     }
-  }, [ isEditDialogOpen]);
+  }, [isEditDialogOpen]);
   const handleFetchJobs = () => {
-      dispatch(fetchJobs()).then((response: any) => {
+    dispatch(fetchJobs()).then((response: any) => {
       setJobs(response.payload.data || []);
       setFilteredJobs(response.payload.data || []);
-     
     });
-  }
+  };
 
   useEffect(() => {
-  
-    handleFetchJobs()
-  
+    handleFetchJobs();
   }, []);
 
   const defaultColDef = useMemo<ColDef>(
@@ -88,7 +91,6 @@ const JobListPage = () => {
           : job,
       ),
     );
-
   };
 
   const handleEdit = (job: JobRowData) => {
@@ -133,46 +135,53 @@ const JobListPage = () => {
     setIsEditDialogOpen(true);
   };
 
-  const handleDelete = (jobId: string) => {
-    setJobToDelete(jobId);
+  const handleDelete = (data: any) => {
+    const companyName = data.companyName ?? data.company;
+    const companyByName = companies?.find(
+      (c: any) => (c.text ?? c.name) === companyName,
+    );
+    const companyId =
+      companyByName?.value ??
+      companyByName?.companyID ??
+      (companies?.some(
+        (c: any) => c.value === data.company || c.companyID === data.company,
+      )
+        ? data.company
+        : '');
+    setJobToDelete({ company: companyId ?? '', uniqueID: data?.uniqueID });
     setIsDeleteDialogOpen(true);
   };
 
   const handleConfirmDelete = () => {
     if (jobToDelete) {
-      setJobs((prevJobs) =>
-        prevJobs.filter(
-          (job) => job.jobID !== jobToDelete && job.id !== jobToDelete,
-        ),
-      );
+      const payload = {
+        company: jobToDelete.company,
+        uniqueID: jobToDelete.uniqueID,
+      };
 
-      // TODO: Replace with actual API call
-      // dispatch(deleteJob(jobToDelete)).then((response: any) => {
-      //   if (response.payload.success) {
-      //     toast({
-      //       title: 'Success!!',
-      //       description: 'Job deleted successfully',
-      //     });
-      //   } else {
-      //     toast({
-      //       variant: 'destructive',
-      //       title: 'Error',
-      //       description: response.payload.message,
-      //     });
-      //   }
-      // });
-
-      toast({
-        title: 'Success!!',
-        description: 'Job deleted successfully',
+      //@ts-ignore
+      dispatch(deleteJob(payload)).then((response: any) => {
+        if (response.payload.success) {
+          toast({
+            title: 'Success',
+            description: 'Job deleted successfully',
+          });
+          setIsDeleteDialogOpen(false);
+          setJobToDelete(null);
+          handleFetchJobs();
+        } else {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: response.payload.message,
+          });
+        }
       });
-      setIsDeleteDialogOpen(false);
-      setJobToDelete(null);
     }
   };
 
   const handleSaveEdit = (data: JobRowData) => {
-    console.log(data, selectedJob,"data")
+    console.log(data, selectedJob, 'data');
     if (!selectedJob) {
       toast({
         variant: 'destructive',
@@ -230,10 +239,10 @@ const JobListPage = () => {
 
   const getStatusCounts = () => {
     return {
-      all: jobs.length,
-      Active: jobs.filter((j) => j.jobStatus === 'Active').length,
-      Cancel: jobs.filter((j) => j.jobStatus === 'Cancel').length,
-      Hold: jobs.filter((j) => j.jobStatus === 'Hold').length,
+      all: jobs?.length,
+      Active: jobs?.filter((j) => j.jobStatus === 'Active').length,
+      Cancel: jobs?.filter((j) => j.jobStatus === 'Cancel').length,
+      Hold: jobs?.filter((j) => j.jobStatus === 'Hold').length,
     };
   };
 

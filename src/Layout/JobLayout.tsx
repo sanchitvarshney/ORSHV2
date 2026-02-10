@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { IoAddOutline } from 'react-icons/io5';
 import { FaList } from 'react-icons/fa';
+import { FaUserFriends } from 'react-icons/fa';
 
 interface Props {
   children: React.ReactNode;
@@ -37,7 +38,19 @@ const JobLayout: React.FC<Props> = ({ children }) => {
             </div>
             Job List
           </NavLink>
-         
+          <NavLink
+            to="/job/job-applications"
+            className={({ isActive }) =>
+              `px-[10px] py-[8px] text-slate-600 rounded-lg font-[500] flex items-center gap-[10px] ${
+                isActive && 'bg-teal-500 text-white'
+              }`
+            }
+          >
+            <div className="h-[20px] w-[20px]">
+              <FaUserFriends className="h-[20px] w-[20px]" />
+            </div>
+            Job Applications
+          </NavLink>
         </nav>
       </div>
       <div>{children}</div>

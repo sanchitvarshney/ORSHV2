@@ -203,7 +203,7 @@ export const jobColumnDefs = (
             Edit
           </button>
           <button
-            onClick={() => onDelete?.(params.data.jobID || params.data.id)}
+            onClick={() => onDelete?.(params.data)}
             className="text-red-600 hover:text-red-800 font-medium text-sm px-2 py-1 rounded hover:bg-red-50 transition-colors"
             aria-label="Delete Job"
           >

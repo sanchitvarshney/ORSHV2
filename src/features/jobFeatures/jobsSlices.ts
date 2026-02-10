@@ -22,10 +22,12 @@ export interface UpdateJobPayload {
 
 interface initialStateType {
   isUpdateLoading: boolean;
+  isDeleteLoading: boolean
 }
 
 const initialState: initialStateType = {
   isUpdateLoading: false,
+  isDeleteLoading: false
 };
 
 export const updatejobs = createAsyncThunk<
@@ -33,6 +35,13 @@ export const updatejobs = createAsyncThunk<
   UpdateJobPayload
 >('adminPage/update/job', async (payload: UpdateJobPayload) => {
   const response = await orshAxios.patch('/job/updateJob', payload);
+  return response?.data;
+});
+export const deleteJob = createAsyncThunk<
+  any,
+  UpdateJobPayload
+>('adminPage/delete/job', async (payload: any) => {
+  const response = await orshAxios.post('/job/deleteJob', payload);
   return response?.data;
 });
 
@@ -53,6 +62,15 @@ const jobSlice = createSlice({
       })
       .addCase(updatejobs.rejected, (state) => {
         state.isUpdateLoading = false;
+      })
+            .addCase(deleteJob.pending, (state) => {
+        state.isDeleteLoading = true;
+      })
+      .addCase(deleteJob.fulfilled, (state) => {
+        state.isDeleteLoading = false;
+      })
+      .addCase(deleteJob.rejected, (state) => {
+        state.isDeleteLoading = false;
       })
   
   },

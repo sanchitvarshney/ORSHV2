@@ -16,7 +16,7 @@ const Loading = ({ message = 'Please wait...', variant = 'fullscreen' }: Loading
       aria-label={message}
       className={`
         flex justify-center items-center
-        bg-white/80 backdrop-blur-sm
+        bg-white/40 backdrop-blur-sm
         transition-opacity duration-200 ease-out
         ${isMinimal ? 'absolute inset-0 z-10 rounded-lg' : 'fixed inset-0 z-[9999]'}
       `}

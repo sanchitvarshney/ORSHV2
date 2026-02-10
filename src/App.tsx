@@ -26,6 +26,7 @@ import PageNotFound from './pages/PageNotFound';
 import JobLayout from './Layout/JobLayout';
 import JobAddPage from './pages/jobPages/JobAddPage';
 import JobListPage from './pages/jobPages/JobListPage';
+import JobApplicationsPage from './pages/jobPages/JobApplicationsPage';
 import TermAndCondition from './pages/termAndPolicy/TermAndCondition';
 import MainLayoutTermAndPolicy from './pages/termAndPolicy/MainLayoutTermAndPolicy';
 import PrivacyPolicy from './pages/termAndPolicy/PrivacyPolicy';
@@ -186,6 +187,18 @@ const router = createBrowserRouter([
         <JobLayout>
           <JobListPage />
         </JobLayout>
+        </MainLayout>
+      </Protected>
+    ),
+  },
+  {
+    path: '/job/job-applications',
+    element: (
+      <Protected authentication>
+        <MainLayout>
+          <JobLayout>
+            <JobApplicationsPage />
+          </JobLayout>
         </MainLayout>
       </Protected>
     ),
