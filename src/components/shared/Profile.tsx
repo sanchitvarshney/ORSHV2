@@ -72,7 +72,7 @@ function Profile() {
   };
 
   return (
-    <div style={{ backgroundColor: '#f5f5f5' }} className="h-full">
+    <div  className="h-full">
       {loading && <Loading />}
       {userProfile && (
         <div className="flex flex-col items-center ">

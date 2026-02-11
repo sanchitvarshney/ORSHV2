@@ -5,9 +5,12 @@ import { AppDispatch, RootState } from '@/store';
 import { searchCompanies } from '@/features/admin/adminPageSlice';
 import { ColDef } from 'ag-grid-community';
 import Loading from '@/components/reusable/Loading';
-import { Link } from 'react-router-dom';
 
-const ListCompany: React.FC = () => {
+interface ListCompanyProps {
+  onCompanyClick?: (companyId: string) => void;
+}
+
+const ListCompany: React.FC<ListCompanyProps> = ({ onCompanyClick }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { companies, loading } = useSelector(
     (state: RootState) => state.adminPage,
@@ -26,15 +29,18 @@ const ListCompany: React.FC = () => {
   }, [dispatch]);
 
   const actionCellRenderer = (params: any) => {
+    const companyId = params.data?.companyID;
+    const name = params.data?.name ?? '';
     return (
       <div className="flex">
-        <Link
-          to={`/company/${params.data.companyID}`} // Adjust the path as needed
-          className="text-teal-500 hover:text-teal-600"
+        <button
+          type="button"
+          onClick={() => companyId && onCompanyClick?.(companyId)}
+          className="text-teal-500 hover:text-teal-600 hover:underline text-left cursor-pointer bg-transparent border-none"
           aria-label="Show Details"
         >
-          {params.data.name}
-        </Link>
+          {name}
+        </button>
       </div>
     );
   };

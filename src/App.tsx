@@ -30,8 +30,16 @@ import JobApplicationsPage from './pages/jobPages/JobApplicationsPage';
 import TermAndCondition from './pages/termAndPolicy/TermAndCondition';
 import MainLayoutTermAndPolicy from './pages/termAndPolicy/MainLayoutTermAndPolicy';
 import PrivacyPolicy from './pages/termAndPolicy/PrivacyPolicy';
+import { ErrorBoundary } from "react-error-boundary";
+import FallBackUI from './components/error/FallBackUI';
+import RootLayout from './Layout/RootLayout';
 const router = createBrowserRouter([
   {
+    path:"/",
+    element: <RootLayout />,
+    errorElement: <FallBackUI />,
+    children: [
+      {
     path: '/',
     element: (
       <Protected authentication>
@@ -233,12 +241,21 @@ const router = createBrowserRouter([
     path: '*',
     element: <PageNotFound />,
   },
+    ]
+  }
 ]);
 function App() {
   return (
     <>
+      <ErrorBoundary
+      fallbackRender={FallBackUI}
+      onError={(error, info) => {
+        console.error(error, info);
+      }}
+    >
       <RouterProvider router={router} />
       <Toaster />
+      </ErrorBoundary>
     </>
   );
 }

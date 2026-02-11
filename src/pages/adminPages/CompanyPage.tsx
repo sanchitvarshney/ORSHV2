@@ -5,12 +5,31 @@ import ListCompany from '@/components/shared/ListCompany';
 import { tabTriggerStyle } from '@/style/CustomStyles';
 import { Button } from '@/components/ui/button';
 import { IoMdDownload } from 'react-icons/io';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import { CompanyInfoContent } from '@/components/ui/companyInfo';
 
 const CompanyPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('add-company');
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+  };
+
+  const handleCompanyClick = (companyId: string) => {
+    setSelectedCompanyId(companyId);
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerOpenChange = (open: boolean) => {
+    setDrawerOpen(open);
+    if (!open) setSelectedCompanyId(null);
   };
 
   return (
@@ -40,9 +59,23 @@ const CompanyPage: React.FC = () => {
           <AddCompany />
         </TabsContent>
         <TabsContent value="list-company" className="h-[calc(100vh-140px) m-0">
-          <ListCompany />
+          <ListCompany onCompanyClick={handleCompanyClick} />
         </TabsContent>
       </Tabs>
+
+      <Sheet open={drawerOpen} onOpenChange={handleDrawerOpenChange}>
+        <SheetContent
+          side="right"
+          className="w-full sm:max-w-2xl overflow-y-auto p-0"
+        >
+          <SheetHeader className="sr-only">
+            <SheetTitle>Company details</SheetTitle>
+          </SheetHeader>
+          {selectedCompanyId && (
+            <CompanyInfoContent companyId={selectedCompanyId} embedded />
+          )}
+        </SheetContent>
+      </Sheet>
     </>
   );
 };

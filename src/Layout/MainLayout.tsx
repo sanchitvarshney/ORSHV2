@@ -1,4 +1,4 @@
-import { BellRing, Home, Mail, User } from 'lucide-react';
+import { BellRing, Home, LogOut, Mail, User } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,7 +38,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { fetchCompanies } from '@/features/homePage/homePageSlice';
 import { IoAddOutline, IoSettingsOutline } from 'react-icons/io5';
-import { FiLogOut } from 'react-icons/fi';
 import { AlertDialogPopup } from '@/components/shared/AlertDialogPopup';
 
 interface Props {
@@ -128,14 +127,15 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                     <MdOutlineAdminPanelSettings className="w-6 h-6" />
                     Admin
                   </NavLink>
-                  <NavLink
-                    to="/profile"
+                   <NavLink
+                    to="/job/job-create"
                     className={NavlinkStyle}
                     onClick={() => setOpen(false)}
                   >
-                    <User className="w-6 h-6" />
-                    Profile
+                    <IoAddOutline className="w-6 h-6" />
+                    Add Job
                   </NavLink>
+             
                   <NavLink
                     to="/company/list"
                     className={NavlinkStyle}
@@ -144,14 +144,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                     <IoSettingsOutline className="w-6 h-6" />
                     Setting
                   </NavLink>
-                  <NavLink
-                    to="/job/job-create"
-                    className={NavlinkStyle}
-                    onClick={() => setOpen(false)}
-                  >
-                    <IoAddOutline className="w-6 h-6" />
-                    Add Job
-                  </NavLink>
+                 
                 </nav>
               </aside>
               <SidebarFooter className="absolute bottom-[20px] left-[20px] right-[20px] bg-white/20 rounded-lg p-[10px]">
@@ -259,30 +252,61 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                   </Badge> */}
                 </div>
               </CustomTooltip>
-              <CustomTooltip message="Notification" side="bottom">
-                <div
-                  className="relative flex items-center justify-center bg-indigo-50 cursor-pointer notification max-w-max p-[5px] rounded-md"
-                  onClick={() => setIsDialogOpen(true)}
-                >
-                  <FiLogOut className="h-[25px] w-[25px] text-slate-600" />
-                </div>
-              </CustomTooltip>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="relative flex items-center justify-center rounded-full cursor-pointer outline-none ring-offset-2 ring-offset-white focus:ring-2 focus:ring-slate-400"
+                    aria-label="User menu"
+                  >
+                    <Avatar className="h-9 w-9 rounded-full border-2 border-slate-200">
+                      <AvatarImage src={(data as any)?.profileImage ?? (data as any)?.imageUrl} alt="" />
+                      <AvatarFallback className="rounded-full bg-indigo-100 text-slate-600 text-sm font-medium">
+                        {data?.firstName?.[0] ?? data?.lastName?.[0] ?? '?'}
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium">
+                        {data?.firstName ?? ''} {data?.lastName ?? ''}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{data?.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsDialogOpen(true)} className="cursor-pointer text-red-600 focus:text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </header>
         </div>
-        <div
+       {
+        !open  && (
+           <div
           className="sidebar z-[20] fixed h-[100vh] bg-white w-[20px] left-0 top-0 bottom-0 flex justify-center items-center shadow shadow-neutral-300 cursor-pointer"
           onClick={() => setOpen(true)}
         >
           <CustomTooltip message="Menubar" side="right">
             <Button
               onClick={() => setOpen(true)}
-              className="p-0 min-h-[50px] min-w-[50px] rounded-full bg-white text-slate-600 shadow shadow-neutral-300 hover:bg-ehite flex justify-end"
+              className="p-0 min-h-[50px] min-w-[50px] rounded-full bg-[#04b0a8] text-white shadow shadow-neutral-300 hover:bg-ehite flex justify-end"
             >
-              <FaChevronRight className="mr-[5px]" />
+              <FaChevronRight className="mr-[5px] " />
             </Button>
           </CustomTooltip>
         </div>
+        )
+       }
 
         <div className="flex flex-col max-w-[calc(100vw-20px)] ml-[20px]">
           <main className="grid items-start flex-1 gap-4 sm:py-0 md:gap-8 bg-white min-h-[calc(100vh-70px)] mt-[70px]">

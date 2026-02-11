@@ -1090,6 +1090,8 @@ interface LabelInputProps {
   icon?: React.ElementType; // Use ElementType for component type
   blank?: boolean;
   readOnly?: boolean;
+  /** Stack label above input to avoid overlap with long labels (e.g. in detail views) */
+  stacked?: boolean;
 }
 
 export const LabelInput: React.FC<LabelInputProps> = ({
@@ -1100,7 +1102,29 @@ export const LabelInput: React.FC<LabelInputProps> = ({
   icon: Icon,
   blank = false,
   readOnly = false,
+  stacked = false,
 }) => {
+  if (stacked) {
+    return (
+      <div className="flex flex-col gap-1.5 min-h-[60px]">
+        <label className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
+          {Icon && <Icon className="h-[18px] w-[18px] shrink-0" />}
+          <span className="break-words">{label}</span>
+        </label>
+        <Input
+          required={required}
+          className={inputStyle}
+          value={value}
+          onChange={onChange}
+          readOnly={readOnly}
+        />
+        {blank && (
+          <p className="text-zinc-400 text-sm">Leave blank if not married</p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="floating-label-group">
       <Input
